@@ -11,8 +11,8 @@ const shell = require("shelljs");
   // shell.exec(GitSetupCommand);
 
   const { GITHUB_USERNAME, GITHUB_PERSONAL_TOKEN } = process.env;
-  console.log("GITHUB_USERNAME",GITHUB_USERNAME);
-  console.log("GITHUB_PERSONAL_TOKEN", GITHUB_PERSONAL_TOKEN);
+  // console.log("GITHUB_USERNAME",GITHUB_USERNAME);
+  // console.log("GITHUB_PERSONAL_TOKEN", GITHUB_PERSONAL_TOKEN);
 
   let cloneCommand = `git clone https://${GITHUB_USERNAME}:${GITHUB_PERSONAL_TOKEN}@github.com/gofynd/Emerge.git`;
   const command = `
@@ -23,11 +23,10 @@ const shell = require("shelljs");
     git checkout master || git checkout -b master
     rm -rf ./*
     cp -R  ./../* ./
-    ${process.cwd()}
     echo "-----------------copied files------------------"
     ls -la
     echo "-----------------------------------"
-    rm -rf ./../node_modules
+    rm -rf ./node_modules
     git add .
     git commit -m "[Auto Generated]"
     ls -la
