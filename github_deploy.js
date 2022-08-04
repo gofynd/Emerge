@@ -26,6 +26,7 @@ const shell = require("shelljs");
     echo "-----------------copied files------------------"
     ls -la
     echo "-----------------------------------"
+    rm -rf ./Emerge
     rm -rf ./node_modules
     git add .
     git commit -m "[Auto Generated]"
