@@ -23,6 +23,7 @@ const shell = require("shelljs");
     git checkout master || git checkout -b master
     rm -rf ./*
     cp -R  ./../* ./
+    ${process.cwd()}
     echo "-----------------copied files------------------"
     ls -la
     echo "-----------------------------------"
