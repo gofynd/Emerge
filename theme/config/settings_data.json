@@ -13,8 +13,37 @@
               "compare_products": false,
               "variants": true,
               "ratings": false,
-              "similar_products": true,
-              "bulk_prices": false
+              "similar_products": false,
+              "bulk_prices": false,
+              "extension": {
+                "above_image_component": [],
+                "below_image_component": [],
+                "above_product_info": [],
+                "below_price_component": [],
+                "below_size_component": [],
+                "below_add_to_cart": [],
+                "below_product_info": [],
+                "product_description_bottom": [
+                  {
+                    "extension_id": "621ce569cb91ec40e4d6c019",
+                    "extension_name": "Product Recommendation",
+                    "config": {
+                      "extension_config_id": "62330effd4e498a1acfdaaa6",
+                      "extension_id": "621ce569cb91ec40e4d6c019",
+                      "organization_id": "60b48f67ff08196f3d811cfa"
+                    },
+                    "template": {
+                      "restrict_page": [
+                        "product"
+                      ],
+                      "_id": "62330f8ab2bb8a0b62087a72",
+                      "display": "Category",
+                      "wrapper": "<div id=\"ext-product-recommendation_category\"></div>",
+                      "slug": ""
+                    }
+                  }
+                ]
+              }
             }
           },
           "page": "product-description"
@@ -23,9 +52,9 @@
           "settings": {
             "props": {
               "show_info_message": true,
-              "gst": true,
+              "gst": false,
               "staff_selection": true,
-              "enable_customer": true,
+              "enable_customer": false,
               "enable_guest": false
             }
           },
