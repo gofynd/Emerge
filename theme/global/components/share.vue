@@ -14,22 +14,21 @@
       <div class="icons">
         <div class="facebook" @click="copyToClipboard">
           <img
-            src="https://hdn-1.fynd.com/company/1085/applications/5eba2d861a29a06c72103e33/theme/pictures/free/original/copy-to-clip.dd7ff79e438876031bfd5fc4017c096d.svg"
+            src="../../assets/images/copy-to-clip.svg"
             title="copy"
             alt=""
           />
         </div>
-
         <div class="facebook" @click="shareOnFacebook">
           <img
-            src="https://hdn-1.fynd.com/company/1085/applications/5eba2d861a29a06c72103e33/theme/pictures/free/original/fb.5672f0e6216ba239e329656e4d4c7a1c.svg"
+            src="../../assets/images/fb.svg"
             title="facebook"
             alt=""
           />
         </div>
         <div class="twitter" @click="shareOnTwitter">
           <img
-            src="https://hdn-1.fynd.com/company/1085/applications/5eba2d861a29a06c72103e33/theme/pictures/free/original/twitter.e05e4e1092acab996dd211b126fd8f0e.svg"
+            src="../../assets/images/twitter.svg"
             title="twitter"
             alt=""
           />

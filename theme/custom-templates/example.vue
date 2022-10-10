@@ -12,6 +12,11 @@ export default {
       text: "Hello",
     };
   },
+  methods: {
+    exampleMethod() {
+      alert("Hello");
+    },
+  },
 };
 </script>
 

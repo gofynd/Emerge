@@ -1,8 +1,6 @@
-import Example from "./example.vue";
-
 export default {
     testpage: {
-        component: Example,
+        component: () => import("./example.vue"),
         header: false,
         footer: false
     }

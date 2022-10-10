@@ -41,9 +41,7 @@
 
               <div
                 v-if="
-                  settings.props.layout.value === 'horizontal' &&
-                    (settings.props.collection_type.value === 'handpicked' ||
-                      settings.props.collection_type.value !== 'handpicked')
+                  settings.props.layout.value === 'horizontal'
                 "
               >
                 <div class="glide-cont" :class="'glide' + _uid" ref="glide">
@@ -216,7 +214,7 @@
             "max": 5,
             "step": 1,
             "unit": "",
-            "label": "Items per row",
+            "label": "Max items per row",
             "default": 5,
             "info": "Maximum items allowed per row"
         },
@@ -281,10 +279,11 @@ export default {
       isMounted: false,
       page: this.serverProps?.page || { current: 0, has_next: true },
       glideOptions: {
-        type: "carousel",
+        type: "slider",
         startAt: 0,
         gap: 30,
         perView: this.settings.props.items_per_row.value,
+        bound: true,
         breakpoints: {
           1024: {
             perView: 3,
@@ -306,20 +305,29 @@ export default {
     "placeholder-items": placeholderItemsVue,
   },
   watch: {
-    settings: function(newVal, oldVal) {
-      if (
-        newVal.props.collection_type.value !==
-        oldVal.props.collection_type.value
-      ) {
-        this.collections = [];
-        this.collectionsLoaded = 0;
-        this.page = { current: 0, has_next: true };
-      }
-      this.cleanupComponent();
-      this.initializeComponent();
+    settings: {
+      handler:function(newVal, oldVal) {
+        if (
+          newVal.props.layout.value !== oldVal.props.layout.value ||
+          newVal.props.collection_type.value !==
+            oldVal.props.collection_type.value ||
+          newVal.props.items_per_row.value !== oldVal.props.items_per_row.value ||
+          this.isBlocksChanged(newVal.blocks, oldVal.blocks)
+        ) {
+          this.collections = [];
+          this.collectionsLoaded = 0;
+          this.page = { current: 0, has_next: true };
+          this.cleanupComponent();
+          this.initializeComponent();
+        }
+      },
+      deep: true
     },
   },
   methods: {
+    isBlocksChanged(newBlocks, oldBlocks) {
+      return JSON.stringify(newBlocks) !== JSON.stringify(oldBlocks)
+    },
     checkGlide(a, b) {
       if (a && b) {
         return parseInt(a) % b === 0 ? true : false;
@@ -455,7 +463,6 @@ export default {
           } else if (window.screen.width <= 480) {
             this.glideOptions.gap = 12;
           }
-
           this.carouselHandle = new Glide(this.$refs.glide, this.glideOptions);
           let glideClass = this.$refs.glide.getAttribute("class");
           this.carouselHandle.on(["move.after"], () => {
@@ -477,7 +484,9 @@ export default {
             }
           });
           this.carouselHandle.mount();
-        } catch (ex) {}
+        } catch (ex) {
+          console.log(ex)
+        }
       });
     },
     initializeComponent() {
@@ -490,10 +499,6 @@ export default {
       }
       this.glideOptions.perView = this.settings.props.items_per_row.value;
       if (this.collections.length === 0) {
-        this.isLoading = true;
-
-        const { props, blocks } = this.settings;
-
         const options = {
           pageNo: this.page.current + 1,
         };
@@ -533,7 +538,7 @@ export default {
         let collections = [];
         let collectionsLoaded = 0;
         res.forEach((data) => {
-          if ((data && data, banners)) {
+          if ((data && data.banners)) {
             collections.push(data);
           }
           collectionsLoaded++;
@@ -688,11 +693,6 @@ export default {
 .glide__slides.ssr-slides-box {
   touch-action: unset;
   overflow-x: auto;
-  .glide__slide {
-    margin-right: 30px;
-    width: auto;
-    max-width: 218px;
-  }
 }
 .btn-nav-coll {
   z-index: @layer;

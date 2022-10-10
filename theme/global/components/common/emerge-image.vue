@@ -26,8 +26,7 @@
 </style>
 
 <script>
-const PLACEHOLDER_URL =
-  "https://hdn-1.fynd.com/company/1085/applications/5eba2d861a29a06c72103e33/theme/pictures/free/original/theme-image-1606391195670.png";
+const PLACEHOLDER_URL = require("../../../assets/images/placeholder.png");
 const IMAGE_SIZES = [
   "original",
   "30x0",

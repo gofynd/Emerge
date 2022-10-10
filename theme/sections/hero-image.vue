@@ -3,6 +3,7 @@
     :class="{
       'section-main-container': !settings.props.full_width.value,
       'full-width-section': settings.props.full_width.value,
+      'full-screen-section': settings.props.fullscreen_image.value,
     }"
   >
     <fdk-link :link="settings.props.button_link.value">
@@ -130,12 +131,25 @@
             "default": true,
             "label": "Full width",
             "info": "Check to allow items to take entire width of the viewport"
+        },
+        {
+            "type": "checkbox",
+            "id": "fullscreen_image",
+            "default": false,
+            "label": "Fullscreen Banner ",
+            "info": "Check to allow items to take entire viewport"
         }
     ]
 }
 </settings>
 <!-- #endregion -->
 <style scoped lang="less">
+.full-screen-section {
+  /deep/ .fy__img {
+    height: 100vh;
+    object-fit: cover;
+  }
+}
 .hero__image {
   /deep/ .fy__img {
     width: 100%;

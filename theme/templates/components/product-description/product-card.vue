@@ -458,7 +458,7 @@ export default {
   width: 100%;
   height: 25px;
   .discount {
-    background: url("https://hdn-1.fynd.com/company/884/applications/000000000000000000000001/theme/pictures/free/original/theme-image-1627556063280.png")
+    background: url("../../../assets/images/special-badge.png")
       bottom left no-repeat;
   }
   .special-offer-text {

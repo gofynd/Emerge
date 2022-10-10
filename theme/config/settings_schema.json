@@ -77,14 +77,14 @@
       "type": "color",
       "category": "Colors",
       "id": "button_add_to_cart_color",
-      "label": "Add to cart  ",
+      "label": "Add to cart/Buy Now  ",
       "default": "#000000"
     },
     {
       "type": "color",
       "category": "Colors",
       "id": "button_add_to_cart_label_color",
-      "label": "Add to cart label ",
+      "label": "Add to cart/Buy Now label ",
       "default": "#ffffff"
     },
     {
@@ -154,6 +154,13 @@
       "id": "text_strikethrough_price_color",
       "label": "Strikethrough price ",
       "default": "#9b9b9b"
+    },
+    {
+      "type": "color",
+      "category": "Colors",
+      "id": "tax_label_color",
+      "label": "Price (tax incl.) label",
+      "default": "#9B9B9B"
     },
     {
       "type": "color",

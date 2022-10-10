@@ -23,14 +23,14 @@
                 </p>
                 <span class="quote-icon right">
                   <!-- <svg-wrapper :svg_src="'double-quote'"></svg-wrapper> -->
-                  <img data-v-6edee4bc="" src="https://hdn-1.fynd.com/company/1085/applications/5eba2d861a29a06c72103e33/theme/pictures/free/original/double-quote.4e214246fbedbdbf0ea18ab43257f7f4.svg"/>
+                  <img src="../assets/images/double-quote.svg"/>
                 </span>
               </div>
               
               <cite> 
                 <section> 
                   <div>{{ block.props && block.props.author_name.value ? block.props.author_name.value : "Author's name"}}</div>
-                  <div>{{ block.props && block.props.author_description.value ? block.props.author_description.value : "Author's Description" }}</div>
+                  <div>{{ block.props && block.props.author_description.value }}</div>
                 </section>
               </cite>
             

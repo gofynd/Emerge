@@ -1,73 +1,114 @@
-import CartLanding from "./templates/pages/cart-landing.vue";
-import CartReview from "./templates/pages/cart-review.vue";
-import CartDelivery from "./templates/pages/cart-delivery.vue";
-import Categories from "./templates/pages/categories.vue";
-import Collections from "./templates/pages/collections.vue";
-import CollectionListing from "./templates/pages/collection-listing.vue";
-import BrandListing from "./templates/pages/brand-listing.vue";
-import CategoryListing from "./templates/pages/category-listing.vue";
-import CompareProducts from "./templates/pages/compare-products.vue";
+import Blog from "./templates/pages/blog.vue";
+import Home from "./templates/pages/home.vue";
 import Footer from "./templates/components/footer.vue";
 import Header from "./templates/components/header.vue";
-import OrderTrackingDetails from "./templates/pages/order-tracking-details.vue";
-import OrderTracking from "./templates/pages/order-tracking.vue";
-import OrderStatus from "./templates/pages/order-status.vue";
-import ProductDescription from "./templates/pages/product-description.vue";
-import ProductListing from "./templates/pages/product-listing.vue";
-import ProductReviews from "./templates/pages/product-reviews.vue";
-import AddProductReview from "./templates/pages/add-product-review.vue";
-import OrdersList from "./templates/pages/orders-list.vue";
-import ScreenSaver from "./templates/components/screen-saver.vue";
-import Blog from "./templates/pages/blog.vue";
 import Loader from "./templates/components/loader.vue";
-import Wishlist from "./templates/pages/wishlist.vue";
-import Brands from "./templates/pages/brands.vue";
-import EmptyState from "./templates/components/empty-state.vue";
-import ProfileDetails from "./templates/pages/profile-details.vue";
-import ProfileAddress from "./templates/pages/profile-address.vue";
-import ShipmentDetails from "./templates/pages/shipment-details.vue";
-import FAQ from "./templates/pages/faq.vue";
-import Home from "./templates/pages/home.vue";
 
-import CustomTemplates from "./custom-templates";
 import styles from "./global/head.less";
+import CustomTemplates from "./custom-templates";
 import sections from "./sections";
 
-/* UNCOMMENT TO APPLY FYND THEME */
-
 export default {
-    getCartLanding: () => CartLanding,
-    getCartReview: () => CartReview,
-    getCartDelivery: () => CartDelivery,
-    getCategories: () => Categories,
-    getCollections: () => Collections,
-    getCollectionListing: () => CollectionListing,
-    getBrandListing: () => BrandListing,
-    getCategoryListing: () => CategoryListing,
-    getCompareProducts: () => CompareProducts,
-    getFooter: () => Footer,
-    getHeader: () => Header,
-    getOrderTrackingDetails: () => OrderTrackingDetails,
-    getOrderTracking: () => OrderTracking,
-    getOrderStatus: () => OrderStatus,
-    getProductDescription: () => ProductDescription,
-    getProductListing: () => ProductListing,
-    getOrdersList: () => OrdersList,
-    getScreenSaver: () => ScreenSaver,
-    getHome: () => Home,
-    getBlog: () => Blog,
-    getBrands: () => Brands,
-    getLoader: () => Loader,
-    getWishList: () => Wishlist,
-    getProfileDetails: () => ProfileDetails,
-    getShipmentDetails: () => ShipmentDetails,
-    getProfileAddress: () => ProfileAddress,
-    getFaq: () => FAQ,
-    getEmptyState: () => null,
-    getProductReviews: () => ProductReviews,
-    getAddProductReview: () => AddProductReview,
-    getCustomTemplates: () => {
-        return CustomTemplates;
-    },
-    sections,
+  // Main chunk
+  getFooter: () => Footer,
+  getHeader: () => Header,
+  getHome: () => Home,
+  getBlog: () => Blog,
+  getEmptyState: () => null,
+  getLoader: () => Loader,
+
+  getScreenSaver: () =>
+    import(
+      /*webpackChunkName:"extras" */ "./templates/components/screen-saver.vue"
+    ),
+  getProductReviews: () =>
+    import(
+      /*webpackChunkName:"extras" */ "./templates/pages/product-reviews.vue"
+    ),
+  getAddProductReview: () =>
+    import(
+      /*webpackChunkName:"extras" */ "./templates/pages/add-product-review.vue"
+    ),
+  getFaq: () =>
+    import(/*webpackChunkName:"extras" */ "./templates/pages/faq.vue"),
+
+  getCartLanding: () =>
+    import(/* webpackChunkName:"cart" */ "./templates/pages/cart-landing.vue"),
+  getCartReview: () =>
+    import(/* webpackChunkName:"cart" */ "./templates/pages/cart-review.vue"),
+  getCartDelivery: () =>
+    import(/* webpackChunkName:"cart" */ "./templates/pages/cart-delivery.vue"),
+
+  getBrands: () =>
+    import(/* webpackChunkName:"products" */ "./templates/pages/brands.vue"),
+  getCategories: () =>
+    import(
+      /* webpackChunkName:"products" */ "./templates/pages/categories.vue"
+    ),
+  getCollections: () =>
+    import(
+      /* webpackChunkName:"products" */ "./templates/pages/collections.vue"
+    ),
+  getProductDescription: () =>
+    import(
+      /* webpackChunkName:"products" */ "./templates/pages/product-description.vue"
+    ),
+  getCompareProducts: () =>
+    import(
+      /* webpackChunkName:"products" */ "./templates/pages/compare-products.vue"
+    ),
+
+  getProductListing: () =>
+    import(
+      /* webpackChunkName:"products-listing" */ "./templates/pages/product-listing.vue"
+    ),
+  getCollectionListing: () =>
+    import(
+      /* webpackChunkName:"products-listing" */ "./templates/pages/collection-listing.vue"
+    ),
+  getBrandListing: () =>
+    import(
+      /* webpackChunkName:"products-listing" */ "./templates/pages/brand-listing.vue"
+    ),
+  getCategoryListing: () =>
+    import(
+      /* webpackChunkName:"products-listing" */ "./templates/pages/category-listing.vue"
+    ),
+
+  getOrderTrackingDetails: () =>
+    import(
+      /* webpackChunkName:"profile" */ "./templates/pages/order-tracking-details.vue"
+    ),
+  getOrderTracking: () =>
+    import(
+      /* webpackChunkName:"profile" */ "./templates/pages/order-tracking.vue"
+    ),
+  getOrderStatus: () =>
+    import(
+      /* webpackChunkName:"profile" */ "./templates/pages/order-status.vue"
+    ),
+  getOrdersList: () =>
+    import(
+      /* webpackChunkName:"profile" */ "./templates/pages/orders-list.vue"
+    ),
+  getWishList: () =>
+    import(
+      /* webpackChunkName:"profile" */ "./templates/pages/wishlist.vue"
+    ),
+  getProfileDetails: () =>
+    import(
+      /* webpackChunkName:"profile" */ "./templates/pages/profile-details.vue"
+    ),
+  getShipmentDetails: () =>
+    import(
+      /* webpackChunkName:"profile" */ "./templates/pages/shipment-details.vue"
+    ),
+  getProfileAddress: () =>
+    import(
+      /* webpackChunkName:"profile" */ "./templates/pages/profile-address.vue"
+    ),
+  getCustomTemplates: () => {
+    return CustomTemplates;
+  },
+  sections,
 };

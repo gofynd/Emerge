@@ -29,13 +29,7 @@
                   >{{ settings.props.cta_text.value }}</fdk-link
                 >
               </div>
-              <div
-                v-if="
-                  settings.props.layout.value === 'grid' &&
-                    (settings.props.brand_type.value === 'handpicked' ||
-                      settings.props.brand_type.value !== 'handpicked')
-                "
-              >
+              <div v-if="settings.props.layout.value === 'grid'">
                 <group-list
                   :cardlist="brands"
                   :cardtype="'BRANDS'"
@@ -45,13 +39,7 @@
                 ></group-list>
               </div>
 
-              <div
-                v-if="
-                  settings.props.layout.value === 'horizontal' &&
-                    (settings.props.brand_type.value === 'handpicked' ||
-                      settings.props.brand_type.value !== 'handpicked')
-                "
-              >
+              <div v-if="settings.props.layout.value === 'horizontal'">
                 <div class="glide-cont" :class="'glide' + _uid" ref="glide">
                   <div data-glide-el="track" class="glide__track">
                     <div
@@ -343,6 +331,8 @@ export default {
       glideOptions: {
         type: "slider",
         startAt: 0,
+        bound: true,
+        focusAt: 0,
         gap: 30,
         perView: this.settings.props.items_per_row.value,
         breakpoints: {
@@ -436,7 +426,7 @@ export default {
         this.isLoading = true;
         let brandPromises = [];
         this.settings.blocks.forEach((block) => {
-          if (block.props.brand.value.id) {
+          if (block.props.brand?.value?.id) {
             brandPromises.push(
               this.$apiSDK.catalog
                 .getBrandDetailBySlug({
@@ -510,14 +500,6 @@ export default {
             this.glideOptions.gap = 40;
           } else if (window.screen.width <= 480) {
             this.glideOptions.gap = 12;
-          }
-          if (
-            this.brands.length <= this.settings.props.items_per_row.value &&
-            !detectMobileWidth()
-          ) {
-            this.glideOptions.type = "slider";
-          } else {
-            this.glideOptions.type = "carousel";
           }
           this.carouselHandle = new Glide(this.$refs.glide, this.glideOptions);
 
@@ -886,6 +868,7 @@ export default {
   height: auto;
   a {
     display: flex;
+    justify-content: center;
     height: 100%;
   }
   /deep/ .placeholder-svg {
@@ -919,8 +902,6 @@ export default {
   touch-action: unset;
   overflow-x: auto;
   .glide__slide {
-    width: 218.8px;
-    margin-right: 15px;
 
     &.big-slide-item {
       max-width: 375px;

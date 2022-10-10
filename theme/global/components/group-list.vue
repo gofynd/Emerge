@@ -5,7 +5,7 @@
         <group-item-product 
           v-for="(item, index) in cardlist"
           :card="item"
-          :key="item.slug + cardtype + index"
+          :key="cardtype + index"
           :global_config="global_config"
           :listing_price_config="listing_price_config"
         />
@@ -31,7 +31,7 @@
         <group-item
           v-for="(item, index) in cardlist"
           :card="item"
-          :key="item.slug + cardtype + index"
+          :key="cardtype + index"
           :cardtype="cardtype"
           :global_config="global_config"
         />

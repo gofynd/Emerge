@@ -38,17 +38,17 @@ export default {
     height: 20px;
     margin-left: 0px;
     margin: 2px;
-    content: url("https://hdn-1.fynd.com/company/884/applications/000000000000000000000001/theme/pictures/free/original/theme-image-1627554013146.png");
+    content: url("../../assets/images/review-star.png");
     @media @tablet-screen {
       width: 15px;
       height: 15px;
     }
   }
   .fa-star-checked {
-    content: url("https://hdn-1.fynd.com/company/884/applications/000000000000000000000004/theme/pictures/free/original/theme-image-1598083110649.png");
+    content: url("../../assets/images/review-star-checked.png");
   }
   .fa-star-half {
-    content: url("https://hdn-1.fynd.com/company/884/applications/000000000000000000000004/theme/pictures/free/original/theme-image-1598083162278.png");
+    content: url("../../assets/images/review-star-half.png");
   }
 }
 </style>

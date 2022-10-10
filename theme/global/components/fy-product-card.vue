@@ -326,7 +326,7 @@ export default {
   }
 }
 .discount {
-  background: url("https://hdn-1.fynd.com/company/884/applications/000000000000000000000004/theme/pictures/free/original/special-badge.bca78ca416ea291079d3974c4aab5e24.png")
+  background: url("../../assets/images/special-badge.png")
     bottom left no-repeat;
 }
 .special-offer-text {
@@ -345,7 +345,7 @@ export default {
   }
 }
 .out-of-stock {
-  background: url("https://hdn-1.fynd.com/company/884/applications/000000000000000000000001/theme/pictures/free/original/theme-image-1612752817255.png")
+  background: url("../../assets/images/special-badge-white.png")
     bottom left no-repeat;
 }
 .out-of-stock-text {

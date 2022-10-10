@@ -69,6 +69,15 @@
             {{ context.product.name }}
           </h1>
           <div class="product__price">
+            <span class="mrp-label" v-if="page_config.props.mrp_label">MRP:</span>
+            <span
+              class="product__price--marked"
+              :style="
+                'color:' + global_config.props.text_strikethrough_price_color
+              "
+              v-if="getProductPrice('effective') !== getProductPrice('marked')"
+              >{{ getProductPrice("marked") | currencyformat }}
+            </span>
             <span
               v-if="activeLadderIndex || activeLadderIndex == 0"
               class="product__price--effective"
@@ -89,14 +98,10 @@
               "
               >{{ getProductPrice("effective") | currencyformat }}</span
             >
-            <span
-              class="product__price--marked"
-              :style="
-                'color:' + global_config.props.text_strikethrough_price_color
-              "
-              v-if="getProductPrice('effective') !== getProductPrice('marked')"
-              >{{ getProductPrice("marked") | currencyformat }}</span
-            >
+            <div v-if="page_config.props.tax_label" class="tax-label" :style="
+                'color:' + global_config.props.tax_label_color
+              ">{{page_config.props.tax_label}}
+            </div>
           </div>
 
           <!-- Extension Slot (Below Price Component) -->
@@ -285,6 +290,21 @@
                 :style="`background-color: ${global_config.props.button_add_to_cart_color};color:${global_config.props.button_add_to_cart_label_color}`"
               >
                 <p>Add to cart</p>
+              </button>
+              <button
+                class="button"
+                @click="addToCart(cart, true)"
+                v-if="
+                  context.product_meta &&
+                  context.product_meta.sellable &&
+                  !global_config.props.disable_cart && 
+                  page_config &&
+                  page_config.props &&
+                  page_config.props.buynow
+                "
+                :style="`background-color: ${global_config.props.button_add_to_cart_color};color:${global_config.props.button_add_to_cart_label_color};margin-top:10px;`"
+              >
+                <p>Buy Now</p>
               </button>
             </template>
           </fdk-cart>
@@ -633,6 +653,25 @@
     },
     {
       "type": "checkbox",
+      "id": "buynow",
+      "label": "Buy Now",
+      "default": false,
+      "info": "Show Buy Now button for product"
+    },
+    {
+      "type": "checkbox",
+      "id": "mrp_label",
+      "label": "Display MRP label text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tax_label",
+      "default": "Price inclusive of all taxes",
+      "label": "Price tax label text"
+    },
+    {
+      "type": "checkbox",
       "id": "share",
       "label": "Share",
       "default": true,
@@ -896,7 +935,7 @@ export default {
       } else {
         images.push({
           type: "image",
-          url: "https://hdn-1.fynd.com/company/884/applications/000000000000000000000001/theme/pictures/free/original/theme-image-1623307821127.png",
+          url: require("../../assets/images/image-gallery-placeholder.png"),
         });
         return images;
       }
@@ -1128,7 +1167,7 @@ export default {
         query: { type: "product", uid: this.context.product.uid },
       });
     },
-    addToCart(cart) {
+    addToCart(cart, buyNow = false) {
       if (this.product_meta?.sizes?.length == 0) {
         this.message = "No sizes available. Product Out of Stock";
         this.showMessage = true;
@@ -1158,6 +1197,7 @@ export default {
             store_id: this.storeInfo.store.uid,
           },
         ],
+        buy_now: buyNow,
       };
       cart.addToCart(addItemData).then((data) => {
         if (data.success) {
@@ -1545,17 +1585,20 @@ export default {
             padding-right: 45px;
           }
         }
+        .tax-label {
+          line-height: 20px;
+          margin-top: 10px;
+        }
         &__price {
           font-size: 1.125rem;
-          display: flex;
-          align-items: flex-end;
           margin-bottom: 0.625rem;
           &--marked {
-            margin-left: 0.9375rem;
-            font-size: 0.875rem;
+            margin-right: 0.9375rem;
             text-decoration: line-through;
             opacity: 0.8;
-            line-height: 1.1rem;
+          }
+          .mrp-label {
+            margin-right: 5px;
           }
         }
         &__size {

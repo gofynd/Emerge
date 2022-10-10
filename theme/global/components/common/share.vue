@@ -1,3 +1,4 @@
+<!-- this file is not used anywhere in the project -->
 <template>
   <div class="share-popup" @click.stop="">
     <template v-if="!shareLoading">
@@ -12,22 +13,21 @@
       <div class="icons">
         <div class="facebook" @click="copyToClipboard">
           <img
-            src="https://hdn-1.fynd.com/company/884/applications/000000000000000000000001/theme/pictures/free/original/theme-image-1627555123353.svg"
+            src="../../assets/images/copy-to-clip.svg"
             title="copy"
             alt=""
           />
         </div>
-
         <div class="facebook" @click="shareOnFacebook">
           <img
-            src="https://hdn-1.fynd.com/company/884/applications/000000000000000000000001/theme/pictures/free/original/theme-image-1627555203705.svg"
+            src="../../assets/images/fb.svg"
             title="facebook"
             alt=""
           />
         </div>
         <div class="twitter" @click="shareOnTwitter">
-          <img
-            src="https://hdn-1.fynd.com/company/884/applications/000000000000000000000001/theme/pictures/free/original/733579.svg"
+           <img
+            src="../../assets/images/twitter.svg"
             title="twitter"
             alt=""
           />

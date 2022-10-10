@@ -14,7 +14,9 @@
     >
       <fdk-empty-state :title="'No items found'"></fdk-empty-state>
     </div>
-    <div v-else-if="context.page_error && context.page_error.statusCode === 500">
+    <div
+      v-else-if="context.page_error && context.page_error.statusCode === 500"
+    >
       <fdk-empty-state :title="'Something went wrong'"></fdk-empty-state>
     </div>
     <template v-else-if="context && context.items">
@@ -80,10 +82,8 @@
                   ></svg-wrapper>
                   <transition name="fade desktop">
                     <share
-                      :title="
-                        `Spread the shopping delight! Scan QR & share this products with
-                  your loved ones`
-                      "
+                      :title="`Spread the shopping delight! Scan QR & share this products with
+                  your loved ones`"
                       :shareLoading="shareLoading"
                       :qr_code="qr_code"
                       @close-share="showShare = false"
@@ -133,7 +133,9 @@
                     }"
                   >
                     <!-- Arrow icon -->
-                    <svg-wrapper :svg_src="'arrow-dropdown-black'"></svg-wrapper>
+                    <svg-wrapper
+                      :svg_src="'arrow-dropdown-black'"
+                    ></svg-wrapper>
                   </span>
                 </div>
                 <div
@@ -164,7 +166,11 @@
                         v-for="(filterItem, index) in filter.filteredValues"
                         :key="'filter-desktop' + index"
                       >
-                        <fdk-link :link="filterItem.url" :disabled="filter.key.is_disabled" v-if="index < 8">
+                        <fdk-link
+                          :link="filterItem.url"
+                          :disabled="filter.key.is_disabled"
+                          v-if="index < 8"
+                        >
                           <div class="filter-item">
                             <div v-if="!filterItem.is_selected">
                               <!-- CheckBox Unchecked -->
@@ -296,8 +302,9 @@
                             <ul>
                               <li
                                 class="title"
-                                v-for="(filteritem,
-                                idx) in filterModalData.filters"
+                                v-for="(
+                                  filteritem, idx
+                                ) in filterModalData.filters"
                                 :key="idx + '-mobile'"
                                 v-on:click="
                                   filterModalData.updateSelectedItem(
@@ -349,9 +356,9 @@
                                   v-model="mobileSearchText"
                                   :placeholder="
                                     'Search ' +
-                                      filterModalData.filters[
-                                        filterModalData.selected_item
-                                      ].key.display
+                                    filterModalData.filters[
+                                      filterModalData.selected_item
+                                    ].key.display
                                   "
                                   @input="
                                     filterModalData.getFilteredResults(
@@ -363,8 +370,9 @@
                               <ul>
                                 <li
                                   class="filterValue"
-                                  v-for="(filterValue,
-                                  index) in filterModalData.getFilteredResults(
+                                  v-for="(
+                                    filterValue, index
+                                  ) in filterModalData.getFilteredResults(
                                     mobileSearchText
                                   )"
                                   :key="filterValue.value + index"
@@ -491,7 +499,7 @@
               </div>
             </div>
             <div class="modal-content">
-              <ul style="width:100%">
+              <ul style="width: 100%">
                 <li
                   v-for="(sortitem, index) in context.sort_on"
                   :key="index + '-sort'"
@@ -522,10 +530,8 @@
           :data-ismobile="String(isMobile)"
         >
           <share
-            :title="
-              `Spread the shopping delight! Scan QR & share this products with
-                            your loved ones`
-            "
+            :title="`Spread the shopping delight! Scan QR & share this products with
+                            your loved ones`"
             :shareLoading="shareLoading"
             :qr_code="qr_code"
             @close-share="showShare = false"
@@ -549,7 +555,7 @@ import share from "./../../global/components/share.vue";
 import { detectMobileWidth } from "./../../helper/utils";
 import { isBrowser } from "browser-or-node";
 import sortDD from "./../../global/components/plp/sort-dd";
-import SvgWrapper from './../../components/common/svg-wrapper.vue';
+import SvgWrapper from "./../../components/common/svg-wrapper.vue";
 
 export default {
   name: "fdk-plp",
@@ -560,14 +566,14 @@ export default {
     "fy-slider-filter": sliderfilter,
     "sort-dd": sortDD,
     share,
-    "svg-wrapper": SvgWrapper
+    "svg-wrapper": SvgWrapper,
   },
   props: {
     context: {},
   },
 
   watch: {
-    context: function() {
+    context: function () {
       if (
         this.context.filters &&
         this.context.filters.length > this.viewMore.length
@@ -579,7 +585,7 @@ export default {
         }
       }
     },
-    active_product_uid: function() {
+    active_product_uid: function () {
       this.context.item.map((item) => {
         if (item.uid === this.active_product_uid) {
           item.is_active = true;
@@ -627,7 +633,7 @@ export default {
       this.shareLoading = true;
       this.showShare = true;
       share.getShareLink(window.location.href).then((res) => {
-        share.generateQRCode(res).then(( data ) => {
+        share.generateQRCode(res).then((data) => {
           this.qr_code = `
                 <div style="width: 250px;">
                   ${data.svg}
@@ -650,7 +656,7 @@ export default {
       }
       this.$router.push({ query: {} });
     },
-    selectedOptions: function(context) {
+    selectedOptions: function (context) {
       let { filters } = context;
       filters = filters || [];
       let filterOptionsArray = filters.reduce((a, f, index) => {
@@ -797,7 +803,7 @@ export default {
       });
     },
     hrefTarget() {
-       return detectMobileWidth() ? "_self" : "_blank";
+      return detectMobileWidth() ? "_self" : "_blank";
     },
     listingPriceConfig() {
       return this.context.app_features?.feature?.common?.listing_price?.value;
@@ -923,11 +929,7 @@ export default {
 .left {
   border-right: 1px solid #e4e5e6;
   margin-bottom: 2em;
-  // margin-right:14px;
-  // box-shadow:0 0 15px rgba(0,0,0,.12);
-  // border-radius:8px;
   background-color: #ffffff;
-  // margin-left:-10px;
 }
 .product-container {
   display: grid;
@@ -935,6 +937,15 @@ export default {
   grid-auto-rows: auto;
   grid-template-rows: 1fr;
   grid-gap: 2em;
+  @media screen and (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+  }
+  /deep/ .imgClass {
+    height: 100%;
+    .fy__img {
+      object-fit: contain;
+    }
+  }
 }
 
 .product-wrapper {
@@ -973,7 +984,7 @@ export default {
   }
 
   .m-action-container {
-    margin-top:20px;
+    margin-top: 20px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -1022,7 +1033,7 @@ export default {
   }
 
   .m-action-container {
-    margin-top:20px;
+    margin-top: 20px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -1261,7 +1272,7 @@ export default {
   width: 44%;
   display: inline-block;
   padding: 15px 10px;
-  color: #19b3b9;
+  color: var(--primaryColor);
 }
 .actionBtn:nth-child(1) {
   border-right: 1px solid #e6e6e6;
@@ -1299,7 +1310,7 @@ export default {
   height: inherit;
 }
 .active {
-  color: #19b3b9;
+  color: var(--primaryColor);
 }
 /deep/ .loader-center {
   grid-column-start: -1;
@@ -1387,7 +1398,7 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 5%;
-  color: #35919b;
+  color: var(--primaryColor);
   cursor: pointer;
 }
 .active-filters-container {
@@ -1417,23 +1428,16 @@ export default {
       background: #41434c;
       color: white;
       .close-icon {
-        background-image: url("https://hdn-1.fynd.com/company/884/applications/000000000000000000000004/theme/pictures/free/original/theme-image-1598082078680.png");
+        background-image: url("../../assets/images/close-icon.png");
       }
     }
     .close-icon {
-      background-image: url("https://hdn-1.fynd.com/company/884/applications/000000000000000000000004/theme/pictures/free/original/theme-image-1598082078680.png");
+      background-image: url("../../assets/images/close-icon.png");
       width: 9px;
       height: 9px;
       display: inline-block;
       background-size: cover;
     }
-  }
-  .reset-btn {
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    color: #19b3b9;
-    cursor: pointer;
   }
 }
 .filter-image {

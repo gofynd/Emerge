@@ -111,7 +111,6 @@ export default {
 
 <style lang="less" scoped>
 .main-footer {
-  margin-top: 3.125rem;
   font-size: 0.8125rem;
   letter-spacing: 0.65px;
   font-size: 12px;
