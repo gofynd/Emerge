@@ -4,6 +4,7 @@
       <img
         v-show="!isLoading"
         :src="source"
+        :alt="alt"
         class="pdp-image animated fadeIn"
         @click="openGallery"
         @load="imageOnLoad"
@@ -38,7 +39,7 @@
         <viewer-3d :src="getOriginalImage()"></viewer-3d>
       </no-ssr>
       <div class="expand-btn" @click="openGallery">
-        <img src="../../assets/images/expand.svg" />
+        <svg-wrapper :svg_src="'expand'"></svg-wrapper>
       </div>
     </div>
   </div>
@@ -46,6 +47,7 @@
 
 <script>
 import { isNode } from "browser-or-node";
+import SvgWrapper from '../common/svg-wrapper.vue';
 import NoSSR from "vue-no-ssr";
 
 export default {
@@ -58,11 +60,15 @@ export default {
     type: {
       type: String,
     },
+    alt: {
+      type: String,
+    },
     product: {},
     key: null,
   },
   components: {
     "no-ssr": NoSSR,
+    "svg-wrapper": SvgWrapper,
     "viewer-3d": () =>
       isNode ? Promise.resolve(null) : Promise.resolve(require("./viewer-3d")),
   },

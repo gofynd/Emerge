@@ -155,27 +155,6 @@
       "info":"Use video in background with overlay (Overlay Image & Video Controls will be disabled by default on website)"
     },
     {
-      "type": "checkbox",
-      "id": "controls",
-      "default": true,
-      "label": "Video Controls",
-      "info":"Uncheck to disable video controls"
-    },
-    {
-      "type":"checkbox",
-      "id":"full_width",
-      "default": false,
-      "label": "Full width",
-      "info":"Check to allow items to take entire width of the viewport"
-    },
-    {
-      "type": "checkbox",
-      "id": "bg_video",
-      "default": false,
-      "label": "Video As Background",
-      "info":"Check to use video as background with overlay"
-    },
-    {
       "type": "select",
       "id": "size",
       "options": [

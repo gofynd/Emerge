@@ -14,7 +14,7 @@
           :templates="getTemplates('above_image_component')"
         />
 
-        <image-gallery :images="getMedias" v-on:paint-canvas="showPreview" />
+        <image-gallery :images="getMedias" :product="context.product" v-on:paint-canvas="showPreview" />
 
         <!-- Extension Slot (Below Image Component) -->
         <fdk-extension
@@ -315,31 +315,6 @@
             :templates="getTemplates('below_add_to_cart')"
           />
 
-          <fdk-notify
-            class="product__actions notify-btn"
-            v-if="
-              context.product_meta &&
-              checkSelleble &&
-              !context.product_meta.sellable &&
-              !global_config.props.disable_cart
-            "
-          >
-            <template slot-scope="notifyProduct">
-              <button
-                class="button"
-                @click="productNotify(notifyProduct)"
-                :style="`background-color: ${global_config.props.button_add_to_cart_color};color:${global_config.props.button_add_to_cart_label_color}`"
-              >
-                <img
-                  :style="`vertical-align: bottom;`"
-                  src="../../assets/images/bell.png"
-                  alt=""
-                />
-                <span>Notify Me</span>
-              </button>
-            </template>
-          </fdk-notify>
-
           <!--Delivery Info-->
           <delivery-info
             v-if="showUserPincodeModal || storeInfo"
@@ -377,57 +352,7 @@
                   "
                 >
                   <div class="compare-icon">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="17.54"
-                      height="11"
-                      viewBox="0 0 17.54 11"
-                    >
-                      <g transform="translate(-179 -222)">
-                        <g transform="translate(-87 -63)">
-                          <g class="a" transform="translate(266 285)">
-                            <circle class="c" cx="5.5" cy="5.5" r="5.5" />
-                            <circle class="d" cx="5.5" cy="5.5" r="5.1" />
-                          </g>
-                          <g class="a" transform="translate(272.64 285)">
-                            <ellipse
-                              class="c"
-                              cx="5.45"
-                              cy="5.5"
-                              rx="5.45"
-                              ry="5.5"
-                            />
-                            <ellipse
-                              class="d"
-                              cx="5.45"
-                              cy="5.5"
-                              rx="5.05"
-                              ry="5.1"
-                            />
-                          </g>
-                          <path
-                            class="b"
-                            d="M0,4.4A5.486,5.486,0,0,1,2.2,0,5.486,5.486,0,0,1,4.4,4.4a5.486,5.486,0,0,1-2.2,4.4A5.486,5.486,0,0,1,0,4.4Z"
-                            transform="translate(272.593 286.099)"
-                          />
-                        </g>
-                      </g>
-                    </svg>
-                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="17.54" height="11" viewBox="0 0 17.54 11">
-                        <g transform="translate(-179 -222)">
-                          <g transform="translate(-87 -63)" >
-                              <g transform="translate(266 285)" :stroke="global_config.props.button_tertiary_color" :fill="'none'">
-                              <circle  cx="5.5" cy="5.5" r="5.5" :stroke="'none'"/>
-                              <circle  cx="5.5" cy="5.5" r="5.1" :fill="'none'"/>
-                              </g>
-                              <g transform="translate(272.64 285)" :stroke="global_config.props.button_tertiary_color" :fill="'none'">
-                                <ellipse  cx="5.45" cy="5.5" rx="5.45" ry="5.5" :stroke="'none'"/>
-                                <ellipse  cx="5.45" cy="5.5" rx="5.05" ry="5.1" :fill="'none'"/>
-                              </g>
-                              <path :fill="global_config.props.button_tertiary_color" d="M0,4.4A5.486,5.486,0,0,1,2.2,0,5.486,5.486,0,0,1,4.4,4.4a5.486,5.486,0,0,1-2.2,4.4A5.486,5.486,0,0,1,0,4.4Z" transform="translate(272.593 286.099)"/>
-                          </g>
-                        </g>
-                    </svg> -->
+                    <svg-wrapper :svg_src="'compare-icon'" class="compare-icon"></svg-wrapper>
                   </div>
                   <p>Add to Compare</p>
                 </div>
@@ -1026,16 +951,6 @@ export default {
         }
         this.sizeError = false;
       }
-    },
-    productNotify(notifyProduct) {
-      let payload = {
-        id: this.context.product.uid,
-      };
-      notifyProduct.notify(payload);
-      this.$toasted.success(this.notifMsg, {
-        position: "bottom-center",
-        duration: 2000,
-      });
     },
     getShareLink(share) {
       this.shareLoading = true;

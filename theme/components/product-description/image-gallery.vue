@@ -11,6 +11,7 @@
           class="image-item"
           :source="src"
           :type="type"
+          :alt="`${product.brand.name} | ${product.name} ${currentImageIndex}`"
           :key="currentImageIndex"
           v-on:clickimage="openGallery"
           @onVideoHover="onmouseleave"
@@ -54,7 +55,7 @@
               :ref="'imageItem' + index"
               class="image-gallery__list--item animated faadeIn type-3d_model"
             >
-              <img src="../../assets/images/3D.svg" />
+              <svg-wrapper :svg_src="'3D'"></svg-wrapper>
             </div>
           </li>
         </ul>
@@ -225,6 +226,7 @@ import piczoom from "./pic-zoom.vue";
 import { isBrowser, isNode } from "browser-or-node";
 import LightBox from "./lightbox-image.vue";
 import { detectMobileWidth } from "../../helper/utils";
+import SvgWrapper from '../common/svg-wrapper.vue';
 import NoSSR from "vue-no-ssr";
 
 export default {
@@ -234,6 +236,7 @@ export default {
     "pic-zoom": piczoom,
     LightBox,
     "no-ssr": NoSSR,
+    "svg-wrapper": SvgWrapper,
     "viewer-3d": () =>
       isNode ? Promise.resolve(null) : Promise.resolve(require("./viewer-3d")),
   },
@@ -241,6 +244,9 @@ export default {
     images: {
       type: Array,
     },
+    product: {
+      type: Object,
+    }
   },
   data() {
     return {

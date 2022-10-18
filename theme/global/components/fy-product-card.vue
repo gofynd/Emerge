@@ -383,8 +383,12 @@ export default {
     overflow: hidden;
     width: 100%;
     padding: 5px 0 2px 0;
-    white-space: nowrap;
+    white-space: normal;
     box-sizing: border-box;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    line-height: normal;
   }
   .price {
     text-align: left;

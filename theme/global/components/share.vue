@@ -13,25 +13,22 @@
       <p style="margin-bottom:10px">OR</p>
       <div class="icons">
         <div class="facebook" @click="copyToClipboard">
-          <img
-            src="../../assets/images/copy-to-clip.svg"
-            title="copy"
-            alt=""
-          />
+          <svg-wrapper
+            class="copytoclip share-icon"
+            :svg_src="'copy-to-clip'"
+          ></svg-wrapper>
         </div>
         <div class="facebook" @click="shareOnFacebook">
-          <img
-            src="../../assets/images/fb.svg"
-            title="facebook"
-            alt=""
-          />
+          <svg-wrapper
+            class="facebook share-icon"
+            :svg_src="'fb'"
+          ></svg-wrapper>
         </div>
         <div class="twitter" @click="shareOnTwitter">
-          <img
-            src="../../assets/images/twitter.svg"
-            title="twitter"
-            alt=""
-          />
+          <svg-wrapper
+            class="twitter share-icon"
+            :svg_src="'twitter'"
+          ></svg-wrapper>
         </div>
       </div>
     </template>

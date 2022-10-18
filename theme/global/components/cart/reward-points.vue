@@ -1,15 +1,15 @@
 <template>
     <div class="list" @click="clickIcon">
         <div class="icons">
-            <img src="../../../assets/images/kycdetails.svg" />
+            <svg-wrapper :svg_src="'kycdetails'"></svg-wrapper>
         </div>
         <div class="offer">
             <div class="desc bold-sm">{{ getTitle }}</div>
             <div class="sub-desc regular-xxxs">{{ getSubtitle }}</div>
         </div>
         <div class="icons">
-            <img src="../../../assets/images/check-box-selected.svg" v-if="this.rewards_data.is_applied"/>
-            <img src="../../../assets/images/regular.svg" v-if="!this.rewards_data.is_applied"/>
+            <svg-wrapper :svg_src="'check-box-selected'" v-if="this.rewards_data.is_applied"></svg-wrapper>
+            <svg-wrapper :svg_src="'regular'" v-if="!this.rewards_data.is_applied"></svg-wrapper>
         </div>
     </div>
 </template>
@@ -46,11 +46,14 @@
 </style>
 
 <script>
-
+import SvgWrapper from '../../../components/common/svg-wrapper.vue';
 export default {
     name: 'reward-points',
     props: {
         rewards_data: {},
+    },
+     components: {
+        "svg-wrapper": SvgWrapper
     },
     computed: {
         getTitle() {

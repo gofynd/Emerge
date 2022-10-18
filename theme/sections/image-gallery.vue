@@ -316,11 +316,6 @@
   .glide__slides.ssr-slides-box {
     touch-action: unset;
     overflow-x: auto;
-    .glide__slide {
-      margin-right: 30px;
-      width: auto;
-      max-width: 218px;
-    }
   }
   .btn-nav-gallery {
     z-index: @layer;

@@ -14,10 +14,7 @@
             class="applied-range"
             :class="activeLadderIndex === index ? 'applied' : null"
           >
-            <img
-              src="../../../assets/images/done.svg"
-              alt="active"
-            />
+            <svg-wrapper :svg_src="'done'"></svg-wrapper> 
           </span>
           <span class="td-content">
             <span class="qty-range">{{
@@ -35,9 +32,13 @@
 </template>
 
 <script>
+import SvgWrapper from '../../../components/common/svg-wrapper.vue';
 export default {
   data() {
     return {};
+  },
+  components: {
+    "svg-wrapper": SvgWrapper
   },
   props: {
     ladderPrices: Object,

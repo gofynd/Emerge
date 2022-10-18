@@ -38,7 +38,7 @@
                   <svg-wrapper
                     v-if="nav.sub_navigation && nav.sub_navigation.length > 0"
                     class="dropdown-icon header-icon"
-                    :svg_src="'header-dropdown'"
+                    :svg_src="'arrow-down'"
                   ></svg-wrapper>
                 </span>
               </fdk-link>
@@ -110,7 +110,7 @@
                 >
                   <svg-wrapper
                     class="wishlist header-icon"
-                    :svg_src="'wishlist-header'"
+                    :svg_src="'wishlist-active'"
                   ></svg-wrapper>
                 </div>
                 <div
@@ -168,31 +168,10 @@
                           searchtext = '';
                         "
                       >
-                        <!-- <IosArrowRoundForwardIcon
-                      w="1.875rem"
-                      h="1.875rem"
-                      class="arrow-icon"
-                    /> -->
-                        <svg
-                          width="1.875rem"
-                          height="1.875rem"
-                          class="arrow-icon"
-                          version="1.1"
-                          id="Layer_1"
-                          xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink"
-                          x="0px"
-                          y="0px"
-                          viewBox="0 0 512 512"
-                          :style="`fill:${global_config.props.header_icon_color}`"
-                          xml:space="preserve"
-                        >
-                          <path
-                            d="M295.6,163.7c-5.1,5-5.1,13.3-0.1,18.4l60.8,60.9H124.9c-7.1,0-12.9,5.8-12.9,13s5.8,13,12.9,13h231.3l-60.8,60.9
-                      c-5,5.1-4.9,13.3,0.1,18.4c5.1,5,13.2,5,18.3-0.1l82.4-83c0,0,0,0,0,0c1.1-1.2,2-2.5,2.7-4.1c0.7-1.6,1-3.3,1-5
-                      c0-3.4-1.3-6.6-3.7-9.1l-82.4-83C308.9,158.8,300.7,158.7,295.6,163.7z"
-                          />
-                        </svg>
+                        <svg-wrapper
+                          class="arrow-icon dropdown-icon header-icon"
+                          :svg_src="'arrow-down'"
+                        ></svg-wrapper>
                       </div>
 
                       <div
@@ -304,9 +283,8 @@
         :style="`border-bottom: 1px solid ${global_config.props.header_border_color};background-color: ${global_config.props.header_bg_color};`"
       >
         <div class="left" @click="showHamburgerMenu">
-          <!-- <IosMenuIcon w="1.875rem" h="1.875rem" /> -->
           <svg-wrapper
-            class="hamburger-icon header-icon"
+            class="hamburger-icon mobile-icon header-icon"
             :svg_src="'hamburger'"
           ></svg-wrapper>
         </div>
@@ -316,79 +294,23 @@
         <fdk-accounts class="right">
           <template slot-scope="accountsData">
             <div
-              class="icon right__icons--wishlist mr-5"
+              class="icon right__icons--wishlist"
               @click.stop="checkLogin(accountsData, 'wishlist')"
-            >
-              <!-- <MdHeartIcon w="1.875rem" h="1.875rem" /> -->
-              <svg
-                class="header-icons"
-                width="24px"
-                height="24px"
-                title="Wishlist"
-                version="1.1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                x="0px"
-                y="0px"
-                viewBox="0 0 512 512"
-                enable-background="new 0 0 512 512"
-                xml:space="preserve"
-                :style="`fill:${global_config.props.header_icon_color}`"
-              >
-                <g>
-                  <path
-                    d="M256,448l-30.164-27.211C118.718,322.442,48,258.61,48,179.095C48,114.221,97.918,64,162.4,64
-                    c36.399,0,70.717,16.742,93.6,43.947C278.882,80.742,313.199,64,349.6,64C414.082,64,464,114.221,464,179.095
-                    c0,79.516-70.719,143.348-177.836,241.694L256,448z"
-                  />
-                </g>
-              </svg>
+            > 
+              <svg-wrapper
+                class="wishlist mobile-icon header-icon"
+                :svg_src="'wishlist-active'"
+              ></svg-wrapper>
             </div>
             <div
               v-if="isMounted && !global_config.props.disable_cart"
               class="icon right__icons--bag"
               @click.stop="checkLogin(accountsData, 'cart')"
             >
-              <!-- <IosCartIcon w="1.875rem" h="1.875rem" /> -->
-              <svg
-                width="24px"
-                height="24px"
-                title="Cart"
-                version="1.1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                x="0px"
-                y="0px"
-                viewBox="0 0 512 512"
-                :style="`fill:${global_config.props.header_icon_color}`"
-                xml:space="preserve"
-              >
-                <g>
-                  <ellipse
-                    transform="matrix(0.9998 -1.842767e-02 1.842767e-02 0.9998 -7.7858 3.0205)"
-                    cx="160"
-                    cy="424"
-                    rx="24"
-                    ry="24"
-                  />
-                  <ellipse
-                    transform="matrix(2.381651e-02 -0.9997 0.9997 2.381651e-02 -48.5107 798.282)"
-                    cx="384.5"
-                    cy="424"
-                    rx="24"
-                    ry="24"
-                  />
-                  <path
-                    d="M463.8,132.2c-0.7-2.4-2.8-4-5.2-4.2L132.9,96.5c-2.8-0.3-6.2-2.1-7.5-4.7c-3.8-7.1-6.2-11.1-12.2-18.6
-                    c-7.7-9.4-22.2-9.1-48.8-9.3c-9-0.1-16.3,5.2-16.3,14.1c0,8.7,6.9,14.1,15.6,14.1c8.7,0,21.3,0.5,26,1.9c4.7,1.4,8.5,9.1,9.9,15.8
-                    c0,0.1,0,0.2,0.1,0.3c0.2,1.2,2,10.2,2,10.3l40,211.6c2.4,14.5,7.3,26.5,14.5,35.7c8.4,10.8,19.5,16.2,32.9,16.2h236.6
-                    c7.6,0,14.1-5.8,14.4-13.4c0.4-8-6-14.6-14-14.6H189h-0.1c-2,0-4.9,0-8.3-2.8c-3.5-3-8.3-9.9-11.5-26l-4.3-23.7
-                    c0-0.3,0.1-0.5,0.4-0.6l277.7-47c2.6-0.4,4.6-2.5,4.9-5.2l16-115.8C464,134,464,133.1,463.8,132.2z"
-                  />
-                </g>
-              </svg>
+              <svg-wrapper
+                class="cart mobile-icon header-icon"
+                :svg_src="'cart'"
+              ></svg-wrapper>
               <p
                 class="cart-count u-df-align-center"
                 :style="`background-color: ${global_config.props.header_cart_notification_bg_color};color: ${global_config.props.header_cart_notification_text_color};`"
@@ -400,22 +322,10 @@
               @click="routetoSettingPage"
               class="icon right__icons--bag setting"
             >
-              <svg
-                id="Layer_1"
-                data-name="Layer 1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <defs></defs>
-                <path
-                  style="fill='#fff'"
-                  d="M22.88,10.76l-1.75-.32h0a8.73,8.73,0,0,0-.44-1.62h0L22,7.63a.2.2,0,0,0,0-.25l-1-1.8a.21.21,0,0,0-.24-.09l-1.65.59,0,0a9.24,9.24,0,0,0-1.17-1.17l0,0,.59-1.65A.21.21,0,0,0,18.42,3l-1.8-1a.2.2,0,0,0-.25,0L15.23,3.29l0,0a7.32,7.32,0,0,0-1.64-.42l-.33-1.77A.19.19,0,0,0,13,1H11a.21.21,0,0,0-.2.16l-.3,1.75a7.93,7.93,0,0,0-1.66.44L7.63,2a.2.2,0,0,0-.25,0L5.58,3a.2.2,0,0,0-.09.24l.59,1.65,0,0A9.24,9.24,0,0,0,4.89,6.06l0,0L3.2,5.49A.2.2,0,0,0,3,5.58l-1,1.8a.2.2,0,0,0,0,.25L3.29,8.77v0a9.2,9.2,0,0,0-.43,1.64l-1.75.32A.21.21,0,0,0,1,11V13a.2.2,0,0,0,.16.2l1.74.3A9.38,9.38,0,0,0,3.3,15.2L2,16.37a.2.2,0,0,0,0,.25l1,1.8a.2.2,0,0,0,.24.09l1.65-.59,0,0a9.24,9.24,0,0,0,1.17,1.17l0,0L5.49,20.8a.19.19,0,0,0,.09.24l1.8,1a.2.2,0,0,0,.25,0l1.14-1.33h0a7.9,7.9,0,0,0,1.64.42l.32,1.76A.2.2,0,0,0,11,23H13a.2.2,0,0,0,.2-.16l.3-1.74a9.93,9.93,0,0,0,1.66-.44L16.37,22a.2.2,0,0,0,.25,0l1.8-1a.21.21,0,0,0,.09-.24l-.59-1.65,0,0a9.24,9.24,0,0,0,1.17-1.17l0,0,1.65.59a.19.19,0,0,0,.24-.09l1-1.8a.2.2,0,0,0,0-.25l-1.33-1.14v0a7.88,7.88,0,0,0,.41-1.64l1.77-.32A.21.21,0,0,0,23,13V11A.2.2,0,0,0,22.88,10.76ZM5.93,3.23h0Zm0,17.55ZM20.78,5.93ZM16.56,2.35h0Zm-5.43-1h0Zm-3.7,1h0ZM3.22,5.93h0ZM2.35,7.44h0Zm-1,5.43Zm0-1.74Zm1,5.44Zm8.78,6.07Zm9.65-4.57Zm.87-1.5Zm.63-4L21,12.81a.73.73,0,0,0-.58.61A10.31,10.31,0,0,1,20,15l0,.23a.76.76,0,0,0,.26.56l1,.86-.57,1-1.28-.45-.22,0a.71.71,0,0,0-.56.27,10.23,10.23,0,0,1-1.14,1.14.73.73,0,0,0-.27.6l0,.21.45,1.25-1,.57-.85-1a.75.75,0,0,0-.59-.25h0L15,20a8.57,8.57,0,0,1-1.56.42.75.75,0,0,0-.6.59l-.24,1.3H11.43L11.19,21a.75.75,0,0,0-.61-.59A8.44,8.44,0,0,1,9,20l-.23,0a.77.77,0,0,0-.56.25l-.85,1-1-.57.46-1.29,0-.21a.71.71,0,0,0-.27-.56,10.23,10.23,0,0,1-1.14-1.14.71.71,0,0,0-.6-.26l-.21,0-1.25.44-.57-1,1-.86a.74.74,0,0,0,.25-.6L4,15a8.23,8.23,0,0,1-.41-1.55.76.76,0,0,0-.6-.61l-1.3-.24V11.43L3,11.19a.73.73,0,0,0,.59-.61A8.87,8.87,0,0,1,4,9l0-.22a.78.78,0,0,0-.26-.57l-1-.85.57-1,1.29.45.21,0a.71.71,0,0,0,.56-.27A9.36,9.36,0,0,1,6.58,5.45a.76.76,0,0,0,.27-.6l0-.21L6.36,3.38l1-.57.86,1a.75.75,0,0,0,.58.25h0L9,4a8.23,8.23,0,0,1,1.55-.41A.75.75,0,0,0,11.19,3l.24-1.31h1.14L12.81,3a.75.75,0,0,0,.61.59A9.75,9.75,0,0,1,15,4l.22,0h0a.76.76,0,0,0,.56-.26l.85-1,1,.57-.46,1.28,0,.22a.74.74,0,0,0,.27.57,8.62,8.62,0,0,1,1.13,1.13.76.76,0,0,0,.6.27h0l.21,0,1.25-.44.57,1-1,.85a.76.76,0,0,0-.25.6L20,9a8.65,8.65,0,0,1,.41,1.55.76.76,0,0,0,.6.61l1.3.24Z"
-                />
-                <path
-                  class="cls-1"
-                  d="M12,8.07h0A3.94,3.94,0,1,0,15.94,12,3.95,3.95,0,0,0,12,8.07Zm2.22,6.17v0A3.17,3.17,0,0,1,8.83,12a3.2,3.2,0,0,1,.93-2.24A3.14,3.14,0,0,1,12,8.83h0A3.18,3.18,0,0,1,15.17,12,3.14,3.14,0,0,1,14.24,14.24Z"
-                />
-              </svg>
+              <svg-wrapper
+                class="setting mobile-icon header-icon"
+                :svg_src="'gear'"
+              ></svg-wrapper>
             </div>
           </template>
         </fdk-accounts>
@@ -427,31 +337,10 @@
           :style="`background-color: ${global_config.props.header_bg_color};color: ${global_config.props.header_text_color}`"
         >
           <div class="close-icon" @click.stop="showHamburger = false">
-            <!-- <MdCloseIcon w="3.5rem" h="3.5rem" /> -->
-            <svg
-              width="3.5rem"
-              height="3.5rem"
-              title="Close menu"
-              version="1.1"
-              id="Layer_1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 512 512"
-              enable-background="new 0 0 512 512"
-              xml:space="preserve"
-              :style="`fill:${global_config.props.header_icon_color}`"
-            >
-              <g id="Icon_5_">
-                <g>
-                  <polygon
-                    points="405,136.798 375.202,107 256,226.202 136.798,107 107,136.798 226.202,256 107,375.202 136.798,405 256,285.798
-                      375.202,405 405,375.202 285.798,256 		"
-                  />
-                </g>
-              </g>
-            </svg>
+            <svg-wrapper
+              class="cross-icon mobile-icon header-icon"
+              :svg_src="'close'"
+            ></svg-wrapper>
           </div>
 
           <ul class="hamburger__navigation">
@@ -471,25 +360,10 @@
                 @click.stop="redirectToMenu(nav)"
                 v-if="nav.sub_navigation && nav.sub_navigation.length > 0"
               >
-                <svg
-                  class="arrow-icon"
-                  version="1.1"
-                  id="Layer_1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  x="0px"
-                  y="0px"
-                  width="1.875rem"
-                  height="1.875rem"
-                  viewBox="0 0 512 512"
-                  :style="`fill:${global_config.props.header_icon_color}`"
-                  xml:space="preserve"
-                >
-                  <path
-                    d="M256,294.1L383,167c9.4-9.4,24.6-9.4,33.9,0s9.3,24.6,0,34L273,345c-9.1,9.1-23.7,9.3-33.1,0.7L95,201.1
-                  c-4.7-4.7-7-10.9-7-17c0-6.1,2.3-12.3,7-17c9.4-9.4,24.6-9.4,33.9,0L256,294.1z"
-                  />
-                </svg>
+                <svg-wrapper
+                  class="arrow-icon mobile-icon header-icon"
+                  :svg_src="'arrow-down'"
+                ></svg-wrapper>
               </div>
 
               <transition name="slide">
@@ -503,25 +377,10 @@
                       class="hamburger__navigation--item back"
                       @click.stop="hideSubmenu(nav)"
                     >
-                      <svg
-                        class="back__icon"
-                        version="1.1"
-                        id="Layer_1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        x="0px"
-                        y="0px"
-                        width="1.875rem"
-                        height="1.875rem"
-                        viewBox="0 0 512 512"
-                        :style="`fill:${global_config.props.header_icon_color}`"
-                        xml:space="preserve"
-                      >
-                        <path
-                          d="M256,294.1L383,167c9.4-9.4,24.6-9.4,33.9,0s9.3,24.6,0,34L273,345c-9.1,9.1-23.7,9.3-33.1,0.7L95,201.1
-                        c-4.7-4.7-7-10.9-7-17c0-6.1,2.3-12.3,7-17c9.4-9.4,24.6-9.4,33.9,0L256,294.1z"
-                        />
-                      </svg>
+                      <svg-wrapper
+                        class="back__icon mobile-icon header-icon"
+                        :svg_src="'arrow-down'"
+                      ></svg-wrapper>
                       <p class="">Go Back</p>
                     </li>
                     <li
@@ -571,27 +430,10 @@
                       showHamburger = false;
                     "
                   >
-                    <!-- <IosSearchIcon w="1.875rem" h="1.875rem" /> -->
-                    <svg
-                      version="1.1"
-                      id="Layer_1"
-                      width="1.875rem"
-                      height="1.875rem"
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      x="0px"
-                      y="0px"
-                      viewBox="0 0 512 512"
-                      :style="`fill:${global_config.props.header_icon_color}`"
-                      xml:space="preserve"
-                    >
-                      <path
-                        d="M443.5,420.2L336.7,312.4c20.9-26.2,33.5-59.4,33.5-95.5c0-84.5-68.5-153-153.1-153S64,132.5,64,217s68.5,153,153.1,153
-                      c36.6,0,70.1-12.8,96.5-34.2l106.1,107.1c3.2,3.4,7.6,5.1,11.9,5.1c4.1,0,8.2-1.5,11.3-4.5C449.5,437.2,449.7,426.8,443.5,420.2z
-                      M217.1,337.1c-32.1,0-62.3-12.5-85-35.2c-22.7-22.7-35.2-52.9-35.2-84.9c0-32.1,12.5-62.3,35.2-84.9c22.7-22.7,52.9-35.2,85-35.2
-                      c32.1,0,62.3,12.5,85,35.2c22.7,22.7,35.2,52.9,35.2,84.9c0,32.1-12.5,62.3-35.2,84.9C279.4,324.6,249.2,337.1,217.1,337.1z"
-                      />
-                    </svg>
+                    <svg-wrapper
+                      class="search-icon mobile-icon header-icon"
+                      :svg_src="'search'"
+                    ></svg-wrapper>
                   </div>
                 </template>
               </fdk-search>
@@ -829,13 +671,15 @@ export default {
   @media screen and (max-width: 1120px) {
     height: 68px;
   }
+  .header-icon {
+    fill: var(--header_icon_color);
+    width:  30px;
+    height: 30px;
+  }
   .header {
     position: fixed;
     top: 0;
     width: 100%;
-    .header-icon {
-      fill: var(--header_icon_color);
-    }
 
     .desktop {
       display: none;
@@ -876,9 +720,6 @@ export default {
               font-size: 1rem;
               line-height: 1rem;
               white-space: nowrap;
-              &:hover {
-                color: var(--header_nav_hover_color);
-              }
             }
           }
         }
@@ -901,7 +742,6 @@ export default {
   }
 
   //navigation
-
   .l2-navigation-list {
     position: absolute;
     min-width: 249px;
@@ -1032,15 +872,20 @@ export default {
   }
 
   //animations
-  .l1-navigation-list__item:hover {
+  .l1-navigation-list__item {
     .dropdown-icon {
-      svg {
-        fill: var(--header_nav_hover_color) !important;
-      }
+      width: 14px;
+      height: 14px;
     }
-    .l2-navigation-list {
-      visibility: visible;
-      opacity: 1;
+    &:hover {
+      color: var(--header_nav_hover_color);
+      .dropdown-icon {
+        fill: var(--header_nav_hover_color);
+      }
+      .l2-navigation-list {
+        visibility: visible;
+        opacity: 1;
+      }
     }
   }
 
@@ -1053,28 +898,18 @@ export default {
     @media screen and (max-width: 1120px) {
       display: flex;
       border-bottom: 1px solid @border-color;
+      align-items: center;
+      justify-content: space-between;
     }
-
-    align-items: center;
-    justify-content: space-between;
     .left {
       cursor: pointer;
     }
-    .icon {
-      svg {
-        width: 24px;
-        height: 24px;
-      }
-      &.mr-5 {
-        margin-right: 0 !important;
-      }
-      margin-left: 10px;
+    .mobile-icon {
+      width: 24px;
+      height: 24px;
       &.setting {
-        margin-left: 15px; //offsetting for cart count space;
-        svg {
-          width: 20px;
-          height: 20px;
-        }
+        width: 20px;
+        height: 20px; 
       }
     }
     .center-mobile {
@@ -1109,6 +944,8 @@ export default {
     }
     .right {
       display: flex;
+      align-items: center;
+      column-gap: 10px;
       .cart-count {
         top: -5px;
         left: 14px;
@@ -1142,7 +979,7 @@ export default {
       width: 2.1875rem;
       padding-bottom: 0;
       cursor: pointer;
-      svg {
+      .cross-icon {
         width: 35px;
         height: 35px;
       }
@@ -1160,8 +997,9 @@ export default {
         cursor: pointer;
         .arrow-icon {
           transform: rotate(-90deg);
-          // opacity: 0.5;
           transition: all 0.4s;
+          width: 16px;
+          height: 16px;
         }
 
         &:hover {
@@ -1212,7 +1050,7 @@ export default {
   }
   .back {
     justify-content: flex-start;
-    padding: 0 0 0 0;
+    padding: 0;
     margin-left: -5px;
     p {
       padding: 0 0 0 3px;
@@ -1220,6 +1058,8 @@ export default {
     &__icon {
       transform: rotate(90deg);
       transition: all 0.4s;
+      width: 20px;
+      height: 20px;
     }
   }
   &__subnav {

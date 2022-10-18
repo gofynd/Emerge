@@ -100,8 +100,15 @@ export default {
         return this.src;
       }
     },
+    getImageType() {
+      return this.src.split(/[#?]/)[0].split('.').pop().trim();
+    },
     fallbackSrcset() {
       let url = this.src;
+      if( this.getImageType.toLowerCase() === 'gif'){
+        return '';
+      }
+
       if (this.isError) {
         url = this.placeholder;
       }
@@ -128,6 +135,10 @@ export default {
     },
     getUrl(width, extension) {
       let url = this.src;
+      if( this.getImageType.toLowerCase() === 'gif'){
+        return '';
+      }
+      
       if (this.isError) {
         url = this.placeholder;
       }

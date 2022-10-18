@@ -20,6 +20,7 @@
       <fdk-empty-state :title="'Something went wrong'"></fdk-empty-state>
     </div>
     <template v-else-if="context && context.items">
+      <h1 class="collection-title" v-if="getPageConfigById('title')">{{context.product_meta.name}}</h1>
       <div class="mobile-header mobile">
         <div class="m-header">
           <div class="m-action-container" ref="mobileActionContainer">
@@ -109,7 +110,6 @@
           </div>
         </div>
       </div>
-
       <div class="content-container">
         <template>
           <div class="left">
@@ -488,7 +488,9 @@
                 </template>
               </fdk-filter-modal>
             </div>
-
+            <div class="collection-desc" v-if="getPageConfigById('description') && getPageConfigById('desc_position') === 'top'">
+              {{context.product_meta.description}}
+            </div>
             <fdk-infinite-loading class="plp-container">
               <template slot-scope="infiniteLoaderData">
                 <div class="product-container">
@@ -519,6 +521,9 @@
                 </div>
               </template>
             </fdk-infinite-loading>
+            <div class="collection-desc" v-if="getPageConfigById('description') && getPageConfigById('desc_position') === 'bottom'">
+              {{context.product_meta.description}}
+            </div>
           </div>
         </template>
       </div>
@@ -579,6 +584,44 @@
   </div>
 </template>
 
+<settings>
+{
+  "props": [
+    {
+      "type": "checkbox",
+      "id": "title",
+      "label": "Show Title",
+      "default": true,
+      "info": "Check to display Collection Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "description",
+      "label": "Show Description",
+      "default": true,
+      "info": "Check to display Collection Description"
+    },
+    {
+      "type": "select",
+      "id": "desc_position",
+      "options": [
+          {
+              "value": "top",
+              "text": "Top"
+          },
+          {
+              "value": "bottom",
+              "text": "Bottom"
+          }
+      ],
+      "default": "top",
+      "label": "Description Position",
+      "info": "Collection description position on page"
+    }
+  ]
+}
+</settings>
+
 <script>
 import fyproductcard from "./../../global/components/fy-product-card.vue";
 import fyselect from "./../../global/components/fy-select.vue";
@@ -602,7 +645,12 @@ export default {
     "svg-wrapper": SvgWrapper,
   },
   props: {
-    context: {},
+    context: {
+      type: Object
+    },
+    page_config:{
+      type: Object
+    }
   },
 
   watch: {
@@ -809,6 +857,9 @@ export default {
         return false;
       }
     },
+    getPageConfigById(id) {
+      return this.page_config?.props?.[id] || "";
+    },
   },
 
   computed: {
@@ -858,6 +909,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.collection-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 0.8rem auto 1rem;
+}
 .plp-container {
   @media @tablet {
     margin: 20px 0 0 0;
@@ -969,6 +1025,9 @@ export default {
 .right {
   margin: 1%;
   width: 100%;
+  .collection-desc {
+    margin: 1rem auto;
+  }
 }
 .left {
   border-right: 1px solid #e4e5e6;

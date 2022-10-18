@@ -32,9 +32,7 @@
                     @click="openLadderPopup"
                   >
                     View Price Options
-                    <div class="price-option-icon">
-                      <img src="../../../assets/images/info-grey.svg" alt="" />
-                    </div>
+                    <svg-wrapper class="price-option-icon" :svg_src="'info-grey'"></svg-wrapper>
                   </div>
                 </div>
                 <ladder-pricing-popup
@@ -131,6 +129,7 @@ import chipitem from "./cart-chip-item.vue";
 import emergeImage from "../../components/common/emerge-image.vue";
 import modal from "../../../global/components/modal.vue";
 import ladderPricePopup from "./ladder-price-popop.vue";
+import SvgWrapper from '../../../components/common/svg-wrapper.vue';
 
 export default {
   data() {
@@ -146,6 +145,7 @@ export default {
     "chip-item": chipitem,
     "emerge-image": emergeImage,
     "ladder-pricing-popup": ladderPricePopup,
+    "svg-wrapper": SvgWrapper,
     modal,
   },
   computed:{

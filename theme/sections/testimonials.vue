@@ -22,8 +22,7 @@
                   }}
                 </p>
                 <span class="quote-icon right">
-                  <!-- <svg-wrapper :svg_src="'double-quote'"></svg-wrapper> -->
-                  <img src="../assets/images/double-quote.svg"/>
+                  <svg-wrapper :svg_src="'double-quote'"></svg-wrapper>
                 </span>
               </div>
               
