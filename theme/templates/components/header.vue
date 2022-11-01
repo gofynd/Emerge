@@ -675,6 +675,10 @@ export default {
     fill: var(--header_icon_color);
     width:  30px;
     height: 30px;
+    ::v-deep svg {
+      width: 100%;
+      height: 100%;
+    }
   }
   .header {
     position: fixed;
