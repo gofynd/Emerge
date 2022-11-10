@@ -1,9 +1,9 @@
 <template>
   <div
     class="main-footer"
-    :style="`--footer_nav_hover_color:${global_config.props.footer_nav_hover_color};border-top: 1px solid ${global_config.props.footer_border_color};background-color: ${global_config.props.footer_bg_color};color: ${global_config.props.footer_text_color}`"
+    :style="dynamicStyles"
   >
-    <div class="main-footer__bottom">
+    <div class="main-footer__bottom" :style="getArtwork">
       <div class="about-block" v-if="context.description !== ''">
         <h5 class="footer-head">ABOUT US</h5>
         <p class="desc">
@@ -105,6 +105,26 @@ export default {
         this.context?.support?.contact?.phone?.phone.length > 0
       );
     },
+    dynamicStyles() {
+      return {
+        "--footer_nav_hover_color":`${this.global_config?.props?.footer_nav_hover_color}`,
+        "border-top": `1px solid ${this.global_config?.props?.footer_border_color}`,
+        "background-color": `${this.global_config?.props?.footer_bg_color}`,
+        "color": `${this.global_config?.props?.footer_text_color}`
+      };
+    },
+    getArtwork() {
+      if(this.global_config?.props?.enable_artwork){
+        return {
+          "background-image":`url(${this.global_config?.props?.artwork})`,
+          "background-repeat": "repeat no-repeat",
+          "background-size": "contain ",
+          "background-position": "center bottom",
+          "--desktop-padding-bottom": `${this.global_config?.props?.padding_bottom_web}px`,
+          "--mobile-padding-bottom": `${this.global_config?.props?.padding_bottom_mweb}px`,
+        }
+      }
+    }
   },
 };
 </script>
@@ -172,8 +192,13 @@ export default {
     padding: 25px 25px;
     display: flex;
     flex-direction: row;
+    padding-bottom: var(--desktop-padding-bottom, 25px);
     @media screen and (max-width: 709px) {
       flex-direction: column;
+    }
+    @media @tablet {
+      padding: 1.25rem 3.125rem 1.875rem 3.125rem;
+      padding-bottom: var(--mobile-padding-bottom, 1.875rem);
     }
     justify-content: space-between;
     .about-block {
@@ -353,12 +378,6 @@ export default {
       @media @mobile {
         flex-direction: column;
       }
-    }
-    @media @tablet {
-      padding: 1.25rem 3.125rem 1.875rem 3.125rem;
-    }
-    @media @mobile {
-      flex-direction: column;
     }
     .logo-block {
     }

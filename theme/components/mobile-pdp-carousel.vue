@@ -15,6 +15,7 @@
               <emerge-image 
                 v-if="img.type === 'image'"
                 :src="img.url"
+                :alt="img.alt"
                 :sources="[{ breakpoint: { max: 480 }, width: 540 }]"
               />
               <div v-if="img.type === 'video' && !img.url.includes('youtube')" class="video-container">

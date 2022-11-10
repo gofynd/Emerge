@@ -29,6 +29,7 @@
                 v-if="images[select].type === 'image'"
                 :key="images[select].url"
                 :src="images[select].url.replace('resize:w-540', 'original')"
+                :alt="images[select].alt"
                 class="vue-lb-modal-image"
                 :sources="[
                   { breakpoint: {min: 481}, width: 800},

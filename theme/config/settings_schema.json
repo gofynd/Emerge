@@ -213,11 +213,6 @@
       "value": ""
     },
     {
-      "type": "header",
-      "category": "Colors",
-      "value": ""
-    },
-    {
       "type": "select",
       "id": "menu_position",
       "default": "left",
@@ -240,6 +235,49 @@
       "default": false,
       "category": "Cart",
       "label": "Disable Cart"
+    },
+    {
+      "type": "header",
+      "category": "Footer",
+      "value": "Artwork"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_artwork",
+      "default": false,
+      "category": "Footer",
+      "label": "Enable Footer Artwork"
+    },
+    {
+      "type": "image_picker",
+      "id": "artwork",
+      "default": "",
+      "category": "Footer",
+      "label": "Footer Artwork"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_web",
+      "category": "Footer",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Artwork Vertical Offset (Desktop)",
+      "default": 25,
+      "info": "Artwork Vertical Offset"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mweb",
+      "category": "Footer",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Artwork Vertical Offset (Tablet)",
+      "default": 30,
+      "info": "Artwork Vertical Offset"
     }
   ]
 }

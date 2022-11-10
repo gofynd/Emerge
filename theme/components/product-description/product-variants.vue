@@ -15,7 +15,7 @@
       </template>
       <template v-else>
         <div class="ukt-title">{{ item.header }}</div>
-        <div v-if="item.display_type === 'image'">
+        <div v-if="item.display_type && item.display_type.includes('image')">
           <div class="variant-container">
             <div
               v-for="(variant, index) in item.items"

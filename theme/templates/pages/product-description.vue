@@ -14,7 +14,11 @@
           :templates="getTemplates('above_image_component')"
         />
 
-        <image-gallery :images="getMedias" :product="context.product" v-on:paint-canvas="showPreview" />
+        <image-gallery
+          :images="getMedias"
+          :product="context.product"
+          v-on:paint-canvas="showPreview"
+        />
 
         <!-- Extension Slot (Below Image Component) -->
         <fdk-extension
@@ -44,7 +48,10 @@
             <template slot-scope="share">
               <div class="share-button" @click="getShareLink(share)">
                 <div class="svg-wrapper">
-                  <svg-wrapper :svg_src="'share'" class="share-img"></svg-wrapper>
+                  <svg-wrapper
+                    :svg_src="'share'"
+                    class="share-img"
+                  ></svg-wrapper>
                 </div>
                 <transition name="fade">
                   <share
@@ -69,7 +76,9 @@
             {{ context.product.name }}
           </h1>
           <div class="product__price">
-            <span class="mrp-label" v-if="page_config.props.mrp_label">MRP:</span>
+            <span class="mrp-label" v-if="page_config.props.mrp_label"
+              >MRP:</span
+            >
             <span
               class="product__price--marked"
               :style="
@@ -98,9 +107,12 @@
               "
               >{{ getProductPrice("effective") | currencyformat }}</span
             >
-            <div v-if="page_config.props.tax_label" class="tax-label" :style="
-                'color:' + global_config.props.tax_label_color
-              ">{{page_config.props.tax_label}}
+            <div
+              v-if="page_config.props.tax_label"
+              class="tax-label"
+              :style="'color:' + global_config.props.tax_label_color"
+            >
+              {{ page_config.props.tax_label }}
             </div>
           </div>
 
@@ -297,7 +309,7 @@
                 v-if="
                   context.product_meta &&
                   context.product_meta.sellable &&
-                  !global_config.props.disable_cart && 
+                  !global_config.props.disable_cart &&
                   page_config &&
                   page_config.props &&
                   page_config.props.buynow
@@ -308,7 +320,21 @@
               </button>
             </template>
           </fdk-cart>
-
+          <div
+            class="product__actions"
+            v-if="
+              checkSelleble &&
+              !context.product_meta.sellable &&
+              !global_config.props.disable_cart
+            "
+          >
+            <div
+              class="button flex-center"
+              :style="`background-color: ${global_config.props.button_add_to_cart_color}80;color:${global_config.props.button_add_to_cart_label_color};margin-top:10px; cursor:inherit`"
+            >
+              <p>PRODUCT NOT AVAILABLE</p>
+            </div>
+          </div>
           <!-- Extension Slot (Below Add To Cart Button) -->
           <fdk-extension
             v-if="getTemplates('below_add_to_cart').length"
@@ -352,7 +378,10 @@
                   "
                 >
                   <div class="compare-icon">
-                    <svg-wrapper :svg_src="'compare-icon'" class="compare-icon"></svg-wrapper>
+                    <svg-wrapper
+                      :svg_src="'compare-icon'"
+                      class="compare-icon"
+                    ></svg-wrapper>
                   </div>
                   <p>Add to Compare</p>
                 </div>
@@ -715,7 +744,7 @@ import groupList from "./../../global/components/group-list.vue";
 import NoSSR from "vue-no-ssr";
 import reviewList from "./../../global/components/reviews/review-list.vue";
 import compareproducts from "../../components/product-description/compare-products.vue";
-import SvgWrapper from '../../components/common/svg-wrapper.vue';
+import SvgWrapper from "../../components/common/svg-wrapper.vue";
 import LadderPricing from "../components/product-description/ladder-price.vue";
 
 export default {
@@ -761,14 +790,18 @@ export default {
       );
     },
     context(newValue) {
-      if (!this.selectedSize && !newValue.product?.loading && !newValue.product_meta?.loading) {
+      if (
+        !this.selectedSize &&
+        !newValue.product?.loading &&
+        !newValue.product_meta?.loading
+      ) {
         this.preSizeSelect();
       }
     },
     $route(to, from) {
       if (to.path != from.path) {
-        (this.ladderPrices=null),
-        (this.storeInfoSelected = {}),
+        (this.ladderPrices = null),
+          (this.storeInfoSelected = {}),
           (this.storeInfo = null),
           (this.selectedSize = "");
       }
@@ -837,7 +870,7 @@ export default {
       return this.page_config?.props?.show_sellers;
     },
     checkSelleble() {
-      return this.context.product_meta.hasOwnProperty("sellable");
+      return this.context?.product_meta?.hasOwnProperty("sellable");
     },
     checkReview() {
       if (
@@ -1215,9 +1248,9 @@ export default {
 
 <style lang="less" scoped>
 .svg-wrapper {
-  position:relative;
-  width:24px;
-  height: 24px
+  position: relative;
+  width: 24px;
+  height: 24px;
 }
 .notify-btn {
   display: flex;

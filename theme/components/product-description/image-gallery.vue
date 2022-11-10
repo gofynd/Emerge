@@ -11,7 +11,7 @@
           class="image-item"
           :source="src"
           :type="type"
-          :alt="`${product.brand.name} | ${product.name} ${currentImageIndex}`"
+          :alt="alt"
           :key="currentImageIndex"
           v-on:clickimage="openGallery"
           @onVideoHover="onmouseleave"
@@ -255,6 +255,7 @@ export default {
       currentImageIndex: 0,
       src: this.images[0].url.replace("resize-w:540", "original"),
       type: this.images[0].type,
+      alt: this.images?.[0]?.alt || `${this.product?.brand?.name} | ${this.product?.name} ${this.currentImageIndex}`,
       isFrameLoading: true,
     };
   },
@@ -265,6 +266,7 @@ export default {
     images(newVal) {
       this.src = newVal[0] && newVal[0].url;
       this.type = newVal[0] && newVal[0].type;
+      this.alt = newVal?.[0]?.alt || `${this.product?.brand?.name} | ${this.product?.name} ${this.currentImageIndex}`;
     },
   },
   methods: {
@@ -272,6 +274,7 @@ export default {
       this.imageLoading = true;
       this.src = this.images[index].url;
       this.type = this.images[index].type;
+      this.alt = this.images?.[index]?.alt || `${this.product?.brand?.name} | ${this.product?.name} ${this.currentImageIndex}`;
       this.currentImageIndex = index;
         this.imageLoading = false;
     },
@@ -287,6 +290,7 @@ export default {
       this.currentImageIndex--;
       this.src = this.images[this.currentImageIndex].url;
       this.type = this.images[this.currentImageIndex].type;
+      this.alt = this.images?.[this.currentImageIndex]?.alt || `${this.product?.brand?.name} | ${this.product?.name} ${this.currentImageIndex}`;
       setTimeout(() => {
         this.imageLoading = false;
       }, 300);
@@ -300,6 +304,7 @@ export default {
       this.currentImageIndex++;
       this.src = this.images[this.currentImageIndex].url;
       this.type = this.images[this.currentImageIndex].type;
+      this.alt = this.images?.[this.currentImageIndex]?.alt || `${this.product?.brand?.name} | ${this.product?.name} ${this.currentImageIndex}`;
       setTimeout(() => {
         this.imageLoading = false;
       }, 300);

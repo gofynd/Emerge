@@ -1,10 +1,11 @@
 <template>
   <div
+    class="app-banner-cont section-wrapper"
     :class="{
       'section-main-container': !settings.props.full_width.value,
       'full-width-section': settings.props.full_width.value,
     }"
-    class="app-banner-cont"
+    :style="dynamicStyles"
   >
     <div class="card-container">
       <div class="top-items" v-if="banner_image">
@@ -42,6 +43,26 @@
       "default": false,
       "label": "Full width",
       "info":"Check to allow items to take entire width of the viewport"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Margin",
+      "default": 0
     }
   ]
 }
@@ -61,9 +82,21 @@ export default {
         "",
     };
   },
+  computed: {
+    dynamicStyles() {
+      return {
+        "--margin-top":`${this.settings?.props?.margin_top?.value}px`,
+        "--margin-bottom": `${this.settings?.props?.margin_bottom?.value}px`,
+      };
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
+.section-wrapper {
+  margin-top: var(--margin-top);
+  margin-bottom: var(--margin-bottom);
+}
 .card-container {
   margin: 0;
 }

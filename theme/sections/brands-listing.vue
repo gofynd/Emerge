@@ -1,5 +1,5 @@
 <template>
-  <div class="section-main-container">
+  <div class="section-main-container section-wrapper" :style="dynamicStyles">
     <template>
       <fdk-infinite-scrolling @loadmore="loadMoreData()" :loadingData="loading">
         <template>
@@ -207,6 +207,26 @@
             "id": "title",
             "default": "",
             "label": "Title"
+        },
+        {
+            "type": "range",
+            "id": "margin_top",
+            "min": 0,
+            "max": 1000,
+            "step": 1,
+            "unit": "px",
+            "label": "Section Top Margin",
+            "default": 0
+        },
+        {
+            "type": "range",
+            "id": "margin_bottom",
+            "min": 0,
+            "max": 1000,
+            "step": 1,
+            "unit": "px",
+            "label": "Section Bottom Margin",
+            "default": 0
         },
         {
             "type": "header",
@@ -605,6 +625,14 @@ export default {
       });
     }
   },
+  computed: {
+    dynamicStyles() {
+      return {
+        "--margin-top":`${this.settings?.props?.margin_top?.value}px`,
+        "--margin-bottom": `${this.settings?.props?.margin_bottom?.value}px`,
+      };
+    },
+  },
   mounted() {
     this.initializeComponent();
   },
@@ -616,6 +644,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.section-wrapper {
+  margin-top: var(--margin-top);
+  margin-bottom: var(--margin-bottom);
+}
 /deep/ .infi-loader {
   .container {
     background-color: transparent;

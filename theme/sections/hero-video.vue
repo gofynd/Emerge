@@ -1,5 +1,6 @@
 <template>
   <div
+    class="section-wrapper" :style="dynamicStyles"
     :class="{
       'section-main-container': !settings.props.full_width.value,
       'full-width-section': settings.props.full_width.value,
@@ -125,6 +126,26 @@
       "label": "Video URL",
       "default": "",
       "info":"Supports MP4 Video & Youtube Video URL"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Margin",
+      "default": 0
     },
     {
       "type": "checkbox",
@@ -346,6 +367,14 @@ export default {
       }
     },
   },
+  computed: {
+    dynamicStyles() {
+      return {
+        "--margin-top":`${this.settings?.props?.margin_top?.value}px`,
+        "--margin-bottom": `${this.settings?.props?.margin_bottom?.value}px`,
+      };
+    },
+  },
   beforeMount() {
     this.showOverlay =
       this.getValueById("bg_video") || !this.getValueById("autoplay");
@@ -551,6 +580,10 @@ export default {
 </script>
 
 <style scoped lang="less">
+.section-wrapper {
+  margin-top: var(--margin-top);
+  margin-bottom: var(--margin-bottom);
+}
 .video-container {
   position: relative;
 

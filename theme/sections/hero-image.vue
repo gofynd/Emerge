@@ -1,5 +1,7 @@
 <template>
   <div
+    class="section-wrapper"
+    :style="dynamicStyles"
     :class="{
       'section-main-container': !settings.props.full_width.value,
       'full-width-section': settings.props.full_width.value,
@@ -11,11 +13,11 @@
         v-if="settings.props.image.value"
         :src="settings.props.image.value"
         :sources="[
-            { breakpoint: { min:1281, max: 1920 }, width: 1920 },
-            { breakpoint: { min:769, max: 1280 }, width: 1280 },
-            { breakpoint: { min:361, max: 768 }, width: 768 },
-            { breakpoint: { max: 360 }, width: 360 }
-          ]"
+          { breakpoint: { min: 1281, max: 1920 }, width: 1920 },
+          { breakpoint: { min: 769, max: 1280 }, width: 1280 },
+          { breakpoint: { min: 361, max: 768 }, width: 768 },
+          { breakpoint: { max: 360 }, width: 360 },
+        ]"
         class="hero__image"
       />
       <fdk-placeholder v-else type="banner-1" />
@@ -33,9 +35,9 @@
             class="overlay__image"
             :src="settings.props.overlay_image.value"
             :sources="[
-              { breakpoint: {min: 1281}, width: 600},
-              { breakpoint: { min:769, max: 1280}, width: 400 },
-              { breakpoint: { max: 768 }, width: 230 }
+              { breakpoint: { min: 1281 }, width: 600 },
+              { breakpoint: { min: 769, max: 1280 }, width: 400 },
+              { breakpoint: { max: 768 }, width: 230 },
             ]"
           />
           <h2
@@ -72,6 +74,26 @@
             "type": "image_picker",
             "label": "Hero Image",
             "default": ""
+        },
+        {
+            "type": "range",
+            "id": "margin_top",
+            "min": 0,
+            "max": 1000,
+            "step": 1,
+            "unit": "px",
+            "label": "Section Top Margin",
+            "default": 0
+        },
+        {
+            "type": "range",
+            "id": "margin_bottom",
+            "min": 0,
+            "max": 1000,
+            "step": 1,
+            "unit": "px",
+            "label": "Section Bottom Margin",
+            "default": 0
         },
         {
             "id": "overlay_layout",
@@ -144,6 +166,11 @@
 </settings>
 <!-- #endregion -->
 <style scoped lang="less">
+.section-wrapper {
+  overflow: hidden;
+  margin-top: var(--margin-top);
+  margin-bottom: var(--margin-bottom);
+}
 .full-screen-section {
   /deep/ .fy__img {
     height: 100vh;
@@ -170,7 +197,7 @@
     align-items: center;
     text-align: center;
     @media @mobile {
-      width: 50%;
+      width: 25%;
       padding: 0;
     }
   }
@@ -240,5 +267,13 @@ export default {
     "emerge-img": emergeImage,
   },
   props: ["settings", "global_config"],
+  computed: {
+    dynamicStyles() {
+      return {
+        "--margin-top": `${this.settings?.props?.margin_top?.value}px`,
+        "--margin-bottom": `${this.settings?.props?.margin_bottom?.value}px`,
+      };
+    },
+  },
 };
 </script>

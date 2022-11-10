@@ -34,7 +34,7 @@
         <div class="product-image">
           <emerge-image
             :src="imageUrl"
-            :alt="product.brand.name + ' | ' + product.name"
+            :alt="imageAlt"
             class="imgClass"
             :sources="[
               { breakpoint: { min: 768 }, width: 360 },
@@ -226,6 +226,9 @@ export default {
       return this.product && this.product.medias.length > 0
         ? this.product.medias[0].url
         : "";
+    },
+    imageAlt() {
+      return this.product?.medias?.[0]?.alt || `${this.product.brand.name} | ${this.product.name}`;
     },
     showSizes: {
       get: function () {

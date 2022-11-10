@@ -1,5 +1,6 @@
 <template>
   <div
+    class="section-wrapper" :style="dynamicStyles"
     :class="{
       'section-main-container': !settings.props.full_width.value,
       'full-width-section': settings.props.full_width.value,
@@ -110,6 +111,26 @@
       "label": "Title"
     },
     {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Margin",
+      "default": 0
+    },
+    {
       "type": "checkbox",
       "id": "autoplay",
       "default": false,
@@ -197,6 +218,10 @@
 </settings>
 <!-- #endregion -->
 <style scoped lang="less">
+.section-wrapper {
+  margin-top: var(--margin-top);
+  margin-bottom: var(--margin-bottom);
+}
 /* Icons */
 .image-slideshow-container {
   margin: 0;
@@ -383,6 +408,14 @@ export default {
   },
   mounted() {
     this.initializeComponent();
+  },
+  computed: {
+    dynamicStyles() {
+      return {
+        "--margin-top":`${this.settings?.props?.margin_top?.value}px`,
+        "--margin-bottom": `${this.settings?.props?.margin_bottom?.value}px`,
+      };
+    },
   },
   methods: {
     checkisBrowser() {

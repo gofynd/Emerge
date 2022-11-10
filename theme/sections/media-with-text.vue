@@ -1,5 +1,5 @@
 <template>
-  <section class="media-with-text full-width-section ">
+  <section class="media-with-text full-width-section section-wrapper" :style="dynamicStyles">
     <no-ssr>
       <videoPlayer
         v-if="settings.props.video.value"
@@ -47,6 +47,26 @@
       "type": "url",
       "label": "Video",
       "default": ""
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Top Margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "unit": "px",
+      "label": "Section Bottom Margin",
+      "default": 0
     },
     {
       "id": "cover",
@@ -111,7 +131,10 @@
 </settings>
 <!-- #endregion -->
 <style lang="less" scoped>
-
+.section-wrapper {
+  margin-top: var(--margin-top);
+  margin-bottom: var(--margin-bottom);
+}
 .media-with-text {
   display: flex;
   align-items: center;
@@ -271,6 +294,12 @@ export default {
   computed: {
     player() {
       return this.$refs.videoPlayer.player;
+    },
+    dynamicStyles() {
+      return {
+        "--margin-top":`${this.settings?.props?.margin_top?.value}px`,
+        "--margin-bottom": `${this.settings?.props?.margin_bottom?.value}px`,
+      };
     },
   },
   components: {

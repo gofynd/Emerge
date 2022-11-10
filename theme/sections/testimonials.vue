@@ -1,13 +1,16 @@
 <template>
   <div
-    class="testimonial-cont section-main-container"
+    class="testimonial-cont section-main-container section-wrapper" :style="dynamicStyles"
   >
+    <div class="title-block" v-if="getValueForSetting('title')">
+      <h3 class="section-heading">{{ getValueForSetting('title') }}</h3>
+    </div>
     <div class="glide-cont" :class="'glide'+ _uid" ref="glide" >
       <div data-glide-el="track" class="glide__track">
         <div class="glide__slides" :class="{ 'ssr-slides-box': !checkisBrowser() && !isMounted }">
           <div class="glide__slide quotes-slider" v-for="(block, i) in blocks" :key="i" >
-              <div class="author-image">
-                <emerge-image v-if="block.props && block.props.author_image.value" :src="block.props.author_image.value" 
+              <div class="author-image" v-if="block.props && block.props.author_image.value">
+                <emerge-image :src="block.props.author_image.value" 
                   :sources="[ {width: 98}]"
                 />
               </div>
@@ -22,7 +25,7 @@
                   }}
                 </p>
                 <span class="quote-icon right">
-                  <svg-wrapper :svg_src="'double-quote'"></svg-wrapper>
+                  <svg-wrapper class="icon" :svg_src="'double-quote'"></svg-wrapper>
                 </span>
               </div>
               
@@ -75,6 +78,32 @@
     "name": "testimonials",
     "label": "Testimonial",
     "props": [
+        {
+            "type": "text",
+            "id": "title",
+            "default": "",
+            "label": "Title"
+        },
+        {
+            "type": "range",
+            "id": "margin_top",
+            "min": 0,
+            "max": 1000,
+            "step": 1,
+            "unit": "px",
+            "label": "Section Top Margin",
+            "default": 0
+        },
+        {
+            "type": "range",
+            "id": "margin_bottom",
+            "min": 0,
+            "max": 1000,
+            "step": 1,
+            "unit": "px",
+            "label": "Section Bottom Margin",
+            "default": 0
+        },
         {
             "type": "checkbox",
             "id": "autoplay",
@@ -144,6 +173,10 @@
 
 <!-- #endregion -->
 <style scoped lang="less">
+.section-wrapper {
+  margin-top: var(--margin-top);
+  margin-bottom: var(--margin-bottom);
+}
 .testimonial-cont {
   .glide__bullets {
     position: relative;
@@ -307,7 +340,7 @@
     &.right {
       margin: 0px 0 20px 0;
       justify-content: flex-end;
-      img {
+      & > .icon{
         transform: rotate(180deg);
       }
     }
@@ -352,7 +385,13 @@ export default {
       return this.settings.blocks.length === 0
         ? this.settings.preset.blocks
         : this.settings.blocks;
-    }
+    },
+    dynamicStyles() {
+      return {
+        "--margin-top":`${this.settings?.props?.margin_top?.value}px`,
+        "--margin-bottom": `${this.settings?.props?.margin_bottom?.value}px`,
+      };
+    },
   },
   data: function() {
     return {
@@ -414,7 +453,10 @@ export default {
         this.carouselHandle.destroy();
         this.carouselHandle = null;
       }
-    }
+    },
+    getValueForSetting(id){
+      return this.settings?.props?.[id]?.value
+    },
   },
   beforeDestroy() {
     this.cleanupComponent()
