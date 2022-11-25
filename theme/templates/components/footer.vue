@@ -116,12 +116,11 @@ export default {
     getArtwork() {
       if(this.global_config?.props?.enable_artwork){
         return {
-          "background-image":`url(${this.global_config?.props?.artwork})`,
-          "background-repeat": "repeat no-repeat",
-          "background-size": "contain ",
-          "background-position": "center bottom",
-          "--desktop-padding-bottom": `${this.global_config?.props?.padding_bottom_web}px`,
-          "--mobile-padding-bottom": `${this.global_config?.props?.padding_bottom_mweb}px`,
+          "--background-desktop":`url(${this.global_config?.props?.artwork})`,
+          "--background-mobile":`${this.global_config?.props?.artwork_mweb ? `url(${this.global_config?.props?.artwork_mweb})`: ''}`,
+          "background-repeat": "no-repeat",
+          "background-size": "cover ",
+          "background-position": "center",
         }
       }
     }
@@ -140,7 +139,7 @@ export default {
     text-align: center;
   }
   .sub-footer_bottom {
-    padding: 36px 24px;
+    padding: 16px 24px;
     display: flex;
     flex-direction: row;
 
@@ -192,15 +191,17 @@ export default {
     padding: 25px 25px;
     display: flex;
     flex-direction: row;
-    padding-bottom: var(--desktop-padding-bottom, 25px);
+    background-image: var(--background-desktop);
+    justify-content: space-between;
+    @media @mobile {
+      background-image: var(--background-mobile, var(--background-desktop));
+    }
     @media screen and (max-width: 709px) {
       flex-direction: column;
     }
     @media @tablet {
       padding: 1.25rem 3.125rem 1.875rem 3.125rem;
-      padding-bottom: var(--mobile-padding-bottom, 1.875rem);
     }
-    justify-content: space-between;
     .about-block {
       .footer-head {
         font-size: 16px;

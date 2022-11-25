@@ -53,9 +53,32 @@
                   v-for="(subnav, index) in nav.sub_navigation"
                   :key="index"
                 >
-                  <fdk-link :link="subnav.link"
-                    ><p>{{ subnav.display }}</p></fdk-link
+                  <fdk-link :link="subnav.link">
+                    <span class="u-df-align-center flex-justify-between">
+                      <p class="mr-2">{{ subnav.display }}</p>
+                      <svg-wrapper
+                        v-if="subnav.sub_navigation && subnav.sub_navigation.length > 0"
+                        class="dropdown-icon header-icon"
+                        :svg_src="'arrow-down'"
+                      ></svg-wrapper>
+                    </span>
+                  </fdk-link>
+
+                  <ul
+                    class="l3-navigation-list"
+                    v-if="subnav.sub_navigation && subnav.sub_navigation.length > 0"
+                    :style="`background-color: ${global_config.props.header_bg_color};color: ${global_config.props.header_text_color}`"
                   >
+                    <li
+                      class="l3-navigation-list__item"
+                      v-for="(subnav, index) in subnav.sub_navigation"
+                      :key="index"
+                    >
+                      <fdk-link :link="subnav.link"
+                        ><p>{{ subnav.display }}</p>
+                      </fdk-link>
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </li>
@@ -387,10 +410,52 @@
                       class="hamburger__navigation--item"
                       v-for="(subnav, idx) in nav.sub_navigation"
                       :key="idx"
+                      @click.stop="redirectToMenu(subnav)"
                     >
-                      <fdk-link :link="subnav.link">
+                      <fdk-link v-if="!subnav.sub_navigation" :link="subnav.link">
                         <p>{{ subnav.display }}</p>
                       </fdk-link>
+                      <p v-else @click.stop="redirectToMenu(subnav)">
+                        {{ subnav.display }}
+                      </p>
+                      <div
+                        @click.stop="redirectToMenu(subnav)"
+                        v-if="subnav.sub_navigation && subnav.sub_navigation.length > 0"
+                      >
+                        <svg-wrapper
+                          class="arrow-icon mobile-icon header-icon"
+                          :svg_src="'arrow-down'"
+                        ></svg-wrapper>
+                      </div>
+                      <transition name="slide">
+                        <div
+                          class="hamburger mobile__subnav"
+                          v-if="subnav.sub_navigation && subnav.sub_navigation.showSubMenu"
+                          :style="`background-color: ${global_config.props.header_bg_color};color: ${global_config.props.header_text_color}`"
+                        >
+                          <ul class="hamburger__navigation">
+                            <li
+                              class="hamburger__navigation--item back"
+                              @click.stop="hideSubmenu(subnav)"
+                            >
+                              <svg-wrapper
+                                class="back__icon mobile-icon header-icon"
+                                :svg_src="'arrow-down'"
+                              ></svg-wrapper>
+                              <p class="">Go Back</p>
+                            </li>
+                            <li
+                              class="hamburger__navigation--item"
+                              v-for="(subnavl3, idx) in subnav.sub_navigation"
+                              :key="idx"
+                            >
+                              <fdk-link :link="subnavl3.link">
+                                <p>{{ subnavl3.display }}</p>
+                              </fdk-link>
+                            </li>
+                          </ul>
+                        </div>
+                      </transition>
                     </li>
                   </ul>
                 </div>
@@ -607,29 +672,13 @@ export default {
         this.navs = this.getNavs();
         this.$router.push(menu.link);
       } else {
-        let navigatons = Object.assign([], this.navs);
-        navigatons.map((nav) => {
-          if (nav.sub_navigation) {
-            if (nav.display == menu.display) {
-              nav.sub_navigation.showSubMenu = true;
-            } else {
-              nav.sub_navigation.showSubMenu = false;
-            }
-          }
-        });
-        this.navs = navigatons;
+        menu.sub_navigation.showSubMenu = true;
+        this.navs = [...this.navs];
       }
     },
     hideSubmenu(menu) {
-      let navigatons = Object.assign([], this.navs);
-      navigatons.map((nav) => {
-        if (nav.sub_navigation) {
-          if (nav.display == menu.display) {
-            nav.sub_navigation.showSubMenu = false;
-          }
-        }
-      });
-      this.navs = navigatons;
+      menu.sub_navigation.showSubMenu = false;
+      this.navs = [...this.navs];
     },
     hideList: function hideList(event) {
       setTimeout(() => {
@@ -746,31 +795,45 @@ export default {
   }
 
   //navigation
-  .l2-navigation-list {
+  .l2-navigation-list, .l3-navigation-list {
     position: absolute;
-    min-width: 249px;
+    width: 250px;
     box-sizing: border-box;
     border: 1px solid @border-color;
     background-color: @color-white;
+    white-space: normal;
     padding: 0.5rem;
     font-size: 1rem;
     line-height: 1.5rem;
     z-index: 999;
-    // top: 110px;
-    // left: 50%;
     color: @color-gray;
     opacity: 0;
     visibility: hidden;
     transition: all 0.4s;
     &__item {
+      position: relative;
       p {
         padding: 0.5rem 1rem;
         display: block;
       }
+      .dropdown-icon{
+        transform: rotate(-90deg);
+      }
       &:hover {
         color: var(--header_nav_hover_color);
+        .dropdown-icon {
+          fill: var(--header_nav_hover_color);
+        }
+        .l3-navigation-list {
+          visibility: visible;
+          opacity: 1;
+        }
       }
     }
+  }
+  .l3-navigation-list {
+    top: 0;
+    left: 100%;
   }
   //right
   .right {
@@ -880,6 +943,7 @@ export default {
     .dropdown-icon {
       width: 14px;
       height: 14px;
+      flex: 0 0 14px;
     }
     &:hover {
       color: var(--header_nav_hover_color);

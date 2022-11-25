@@ -253,31 +253,14 @@
       "id": "artwork",
       "default": "",
       "category": "Footer",
-      "label": "Footer Artwork"
+      "label": "Footer Artwork (Desktop)"
     },
     {
-      "type": "range",
-      "id": "padding_bottom_web",
+      "type": "image_picker",
+      "id": "artwork_mweb",
+      "default": "",
       "category": "Footer",
-      "min": 0,
-      "max": 1000,
-      "step": 1,
-      "unit": "px",
-      "label": "Artwork Vertical Offset (Desktop)",
-      "default": 25,
-      "info": "Artwork Vertical Offset"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mweb",
-      "category": "Footer",
-      "min": 0,
-      "max": 1000,
-      "step": 1,
-      "unit": "px",
-      "label": "Artwork Vertical Offset (Tablet)",
-      "default": 30,
-      "info": "Artwork Vertical Offset"
+      "label": "Footer Artwork (Mobile)"
     }
   ]
 }
