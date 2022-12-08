@@ -575,6 +575,12 @@
           />
         </transition>
       </div>
+      <div class="scroll__top" 
+        :class="{'is-visible': isTop}"
+        @click="scrollToTop()"
+      >
+        <svg-wrapper class="scroll__top--icon" :svg_src="'arrow-left-white'"></svg-wrapper>
+      </div>
     </template>
   </div>
 </template>
@@ -653,10 +659,17 @@ export default {
         },
       ],
       isMobile: false,
+      isTop: false,
     };
+  },
+  created() {
+    if (isBrowser) window.addEventListener("scroll", this.handleScroll);
   },
   mounted() {
     this.isMobile = detectMobileWidth();
+  },
+  destroyed() {
+    if (isBrowser) window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
     hideShare() {
@@ -809,6 +822,19 @@ export default {
         return false;
       }
     },
+    handleScroll() {
+      const scrollValue = isBrowser ? window.scrollY : 0;
+      this.isTop =  scrollValue > 200;
+    },
+    scrollToTop() {
+      if (isBrowser) {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
+      }
+    },
   },
 
   computed: {
@@ -867,6 +893,33 @@ export default {
   }
   /deep/.loading {
     display: none;
+  }
+}
+.scroll__top {
+  width: 40px;
+  height: 40px;
+  right: 30px;
+  bottom: 5%;
+  position: fixed;
+  opacity: 0;
+  cursor: pointer;
+  visibility: hidden;
+  background-color: @PrimaryColor;
+  border-radius: 50%;
+  .flex-center();
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  &--icon {
+    transform: rotate(90deg);
+    width: 20px;
+    height: 20px;
+    margin: 0!important;
+    ::v-deep svg {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 .share-wrap {

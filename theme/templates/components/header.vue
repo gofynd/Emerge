@@ -152,14 +152,6 @@
                     {{ context.cart_item_count }}
                   </p>
                 </div>
-                <div class="icon right__icons--bag py-5">
-                  <a @click="routetoSettingPage" class="light-sm">
-                    <svg-wrapper
-                      class="setting header-icon"
-                      :svg_src="'gear'"
-                    ></svg-wrapper>
-                  </a>
-                </div>
                 <transition name="slide-fade">
                   <fdk-search
                     class="search"
@@ -340,15 +332,6 @@
               >
                 {{ context.cart_item_count }}
               </p>
-            </div>
-            <div
-              @click="routetoSettingPage"
-              class="icon right__icons--bag setting"
-            >
-              <svg-wrapper
-                class="setting mobile-icon header-icon"
-                :svg_src="'gear'"
-              ></svg-wrapper>
             </div>
           </template>
         </fdk-accounts>
@@ -691,13 +674,6 @@ export default {
       this.showSearch = true;
       this.searchtext = evt.target.value;
       fetchSuggestionsAction(this.searchtext);
-    },
-    routetoSettingPage() {
-      if (detectMobileWidth()) {
-        this.$router.push("/setting");
-      } else {
-        this.$router.push("/setting/currency");
-      }
     },
   },
 };

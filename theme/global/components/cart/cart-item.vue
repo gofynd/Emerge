@@ -94,6 +94,7 @@
               </a>
             </div>
             <modal
+              class="product-remove"
               :isOpen="confirmModalvisible"
               :title="'Remove Product'"
               @closedialog="confirmModalvisible = false"
@@ -101,16 +102,14 @@
               <p class="message-body light-xs">
                 Are you sure you want to remove this product from cart?
               </p>
-              <div data-v-2276b64c="" class="btn-container">
+              <div class="btn-container">
                 <a
-                  data-v-2276b64c=""
                   class="no-button bold-sm"
                   @click="confirmModalvisible = false"
                   >No</a
                 >
-                <div data-v-2276b64c="" class="separator light-xxxxl">|</div>
+                <div class="separator light-xxxxl">|</div>
                 <a
-                  data-v-2276b64c=""
                   class="yes-button bold-sm"
                   @click="removeFromCart"
                   >Yes</a
@@ -423,6 +422,19 @@ export default {
     margin: 4px 0 18px;
     line-height: 20px;
     text-align: center;
+  }
+  &.product-remove {
+    .btn-container {
+      display: flex;
+      align-items: center;
+      a {
+          flex: 1;
+          justify-content: center;
+          display: flex;
+          cursor: pointer;
+          padding: 10px;
+      }
+    }
   }
 }
 .bag-brand-name {
