@@ -496,9 +496,10 @@
                     v-for="(product, index) in getProducts"
                     :key="index + '-product.uid'"
                   >
-                    <div
-                      @click="redirectToProduct(product.url)"
-                      class="product-wrapper"
+                    <fdk-link class="product-wrapper"
+                      :link="product.url"
+                      :target="!isMobile ? '_blank': ''"
+                      @click.native="redirectToProduct($event, product.url)"
                     >
                       <fy-product-card
                         :product="product"
@@ -509,7 +510,7 @@
                         :global_config="global_config"
                         :listing_price_config="listingPriceConfig"
                       ></fy-product-card>
-                    </div>
+                    </fdk-link>
                   </div>
                   <fdk-loader
                     id="loader"
@@ -675,16 +676,11 @@ export default {
     hideShare() {
       this.showShare = false;
     },
-    redirectToProduct: function redirectToProduct(productUrl) {
+    redirectToProduct(event, productUrl) {
       if (this.isLoadedInIframe()) {
+        event.preventDefault();
         this.$router.push(productUrl);
         return;
-      }
-      if (!this.isMobile) {
-        let routeData = this.$router.resolve(productUrl);
-        window.open(routeData.href, "_blank");
-      } else {
-        this.$router.push(productUrl);
       }
     },
     getShareLink(share) {
