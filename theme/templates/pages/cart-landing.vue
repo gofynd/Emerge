@@ -1,6 +1,9 @@
 <template>
   <div class="cart-page-cont">
-    <div class="cart-message error" v-if="context && context.bag_data && context.bag_data.message">
+    <div
+      class="cart-message error"
+      v-if="context && context.bag_data && context.bag_data.message"
+    >
       {{ context.bag_data.message }}
     </div>
 
@@ -116,14 +119,22 @@
               :placeholder="comment.label"
               :cart="cart"
               @onInput="updateComment"
-              :comment_title ="page_config.props.customize_comment"
-              :showCommentError = "showCommentError"
-              :errorCommentMessage = "page_config.props.customize_comment_errortext"
+              :comment_title="page_config.props.customize_comment"
+              :showCommentError="showCommentError"
+              :errorCommentMessage="
+                page_config.props.customize_comment_errortext
+              "
             ></comment>
             <breakup
               v-if="context.bag_data.breakup_values"
               :breakup="context.bag_data.breakup_values.display"
             ></breakup>
+            <div class="extCart">
+              <fdk-extension
+                v-if="getTemplates('below_price_breakup').length"
+                :templates="getTemplates('below_price_breakup')"
+              />
+            </div>
             <checkout-mode
               :context="context"
               v-if="
@@ -254,6 +265,19 @@
       "label": "Comment Error Message",
       "default": "Please add any comments",
       "info": "Customize Comment Error Message on Cart"
+    },
+    {
+      "type": "extension",
+      "id": "extension",
+      "label": "Extension Positions",
+      "info": "Handle extension in these positions",
+      "positions": [
+        {
+          "value": "below_price_breakup",
+          "text": "Below Price Breakup"
+        }
+      ],
+      "default": {}
     }
   ]
 }
@@ -273,7 +297,7 @@ import gstChip from "./../../global/components/cart/gst-chip.vue";
 import employeeChip from "./../../global/components/cart/employee-card.vue";
 import rewardPointsChip from "./../../global/components/cart/reward-points.vue";
 import checkoutMode from "./../../global/components/cart/checkout-mode.vue";
-import SvgWrapper from './../../components/common/svg-wrapper.vue';
+import SvgWrapper from "./../../components/common/svg-wrapper.vue";
 
 const GST_NUMBER_LENGTH = 15;
 
@@ -293,7 +317,7 @@ export default {
     breakup,
     vSelect,
     toast,
-    "svg-wrapper": SvgWrapper
+    "svg-wrapper": SvgWrapper,
   },
   data() {
     return {
@@ -314,7 +338,7 @@ export default {
         value: "",
         label: "Add any comments",
       },
-      showCommentError:false,
+      showCommentError: false,
     };
   },
   computed: {
@@ -338,9 +362,7 @@ export default {
       }
     },
     selectedStaffName() {
-      if (
-        this.context.selected_employee?.first_name
-      ) {
+      if (this.context.selected_employee?.first_name) {
         return `${this.context.selected_employee?.first_name} ${this.context.selected_employee?.last_name}`;
       }
       return "";
@@ -402,10 +424,13 @@ export default {
     }
   },
   methods: {
-    updateComment(cart,comment) {
+    getTemplates(position) {
+      return this.page_config.props?.extension?.[position] || [];
+    },
+    updateComment(cart, comment) {
       this.comment.value = comment;
-      let body = { comment }
-      cart.updateCartMeta(body, this.context.bag_data.id)
+      let body = { comment };
+      cart.updateCartMeta(body, this.context.bag_data.id);
     },
     removeCart(params) {
       this.isLoading = true;
@@ -519,14 +544,18 @@ export default {
       }
     },
     routeToCheckout() {
-      if(this.page_config.props.is_commentmandatory && (this.comment.value.trim().length) == 0){
-          this.showCommentError = true;
-          console.log("errormsg  "+ this.page_config.props.customize_comment_errortext);
-        }
-        else {
-          this.showCommentError = false;
-          this.$router.push(`/cart/delivery?id=${this.context.bag_data.id}`);
-        }
+      if (
+        this.page_config.props.is_commentmandatory &&
+        this.comment.value.trim().length == 0
+      ) {
+        this.showCommentError = true;
+        console.log(
+          "errormsg  " + this.page_config.props.customize_comment_errortext
+        );
+      } else {
+        this.showCommentError = false;
+        this.$router.push(`/cart/delivery?id=${this.context.bag_data.id}`);
+      }
     },
     getCartShareLink(share) {
       this.showShare = true;

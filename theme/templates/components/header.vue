@@ -356,7 +356,7 @@
               :key="index"
               @click.stop="redirectToMenu(nav)"
             >
-              <fdk-link v-if="!nav.sub_navigation" :link="nav.link">
+              <fdk-link v-if="!hasSubNavigation(nav)" :link="nav.link">
                 <p>{{ nav.display }}</p>
               </fdk-link>
               <p v-else @click.stop="redirectToMenu(nav)">
@@ -364,7 +364,7 @@
               </p>
               <div
                 @click.stop="redirectToMenu(nav)"
-                v-if="nav.sub_navigation && nav.sub_navigation.length > 0"
+                v-if="hasSubNavigation(nav)"
               >
                 <svg-wrapper
                   class="arrow-icon mobile-icon header-icon"
@@ -395,7 +395,7 @@
                       :key="idx"
                       @click.stop="redirectToMenu(subnav)"
                     >
-                      <fdk-link v-if="!subnav.sub_navigation" :link="subnav.link">
+                      <fdk-link v-if="!hasSubNavigation(subnav)" :link="subnav.link">
                         <p>{{ subnav.display }}</p>
                       </fdk-link>
                       <p v-else @click.stop="redirectToMenu(subnav)">
@@ -403,7 +403,7 @@
                       </p>
                       <div
                         @click.stop="redirectToMenu(subnav)"
-                        v-if="subnav.sub_navigation && subnav.sub_navigation.length > 0"
+                        v-if="hasSubNavigation(subnav)"
                       >
                         <svg-wrapper
                           class="arrow-icon mobile-icon header-icon"
@@ -653,7 +653,6 @@ export default {
       if (!menu.sub_navigation.length) {
         this.showHamburger = false;
         this.navs = this.getNavs();
-        this.$router.push(menu.link);
       } else {
         menu.sub_navigation.showSubMenu = true;
         this.navs = [...this.navs];
@@ -674,6 +673,9 @@ export default {
       this.showSearch = true;
       this.searchtext = evt.target.value;
       fetchSuggestionsAction(this.searchtext);
+    },
+    hasSubNavigation(nav, p) {
+      return nav?.sub_navigation?.length > 0;
     },
   },
 };
@@ -1033,7 +1035,7 @@ export default {
       padding-bottom: 1.25rem;
       margin-bottom: 1.25rem;
       &--item {
-        padding: 0.625rem 0 0.625rem 1.875rem;
+        padding-left: 1.875rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -1052,6 +1054,10 @@ export default {
           .arrow-icon {
             fill: var(--header_nav_hover_color) !important;
           }
+        }
+        & > a, & > p {
+          padding: 0.625rem 0;
+          flex-grow: 1;
         }
       }
     }
