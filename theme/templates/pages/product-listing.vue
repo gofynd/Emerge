@@ -496,9 +496,10 @@
                     v-for="(product, index) in getProducts"
                     :key="index + '-product.uid'"
                   >
-                    <fdk-link class="product-wrapper"
+                    <fdk-link
+                      class="product-wrapper"
                       :link="product.url"
-                      :target="!isMobile ? '_blank': ''"
+                      :target="!isMobile ? '_blank' : ''"
                       @click.native="redirectToProduct($event, product.url)"
                     >
                       <fy-product-card
@@ -508,6 +509,7 @@
                         @slide-up="slideUpEventListener($event)"
                         @slide-down="slideDownEventListener($event)"
                         :global_config="global_config"
+                        :page_config="page_config"
                         :listing_price_config="listingPriceConfig"
                       ></fy-product-card>
                     </fdk-link>
@@ -576,15 +578,32 @@
           />
         </transition>
       </div>
-      <div class="scroll__top" 
-        :class="{'is-visible': isTop}"
+      <div
+        class="scroll__top"
+        :class="{ 'is-visible': isTop }"
         @click="scrollToTop()"
       >
-        <svg-wrapper class="scroll__top--icon" :svg_src="'arrow-left-white'"></svg-wrapper>
+        <svg-wrapper
+          class="scroll__top--icon"
+          :svg_src="'arrow-left-white'"
+        ></svg-wrapper>
       </div>
     </template>
   </div>
 </template>
+<settings>
+{
+"props": [
+    {
+      "type": "checkbox",
+      "id": "hidebrandname",
+      "label": "Hide Brand name",
+      "default": false,
+      "info": "Check to hide brand name"
+    }
+]
+}
+</settings>
 
 <script>
 import fyproductcard from "./../../global/components/fy-product-card.vue";
@@ -820,7 +839,7 @@ export default {
     },
     handleScroll() {
       const scrollValue = isBrowser ? window.scrollY : 0;
-      this.isTop =  scrollValue > 200;
+      this.isTop = scrollValue > 200;
     },
     scrollToTop() {
       if (isBrowser) {
@@ -911,7 +930,7 @@ export default {
     transform: rotate(90deg);
     width: 20px;
     height: 20px;
-    margin: 0!important;
+    margin: 0 !important;
     ::v-deep svg {
       width: 100%;
       height: 100%;
@@ -1047,7 +1066,6 @@ export default {
 }
 
 .product-wrapper {
-  border: 1px solid #e4e5e6;
   border-radius: 3px;
   box-sizing: border-box;
   height: 100%;

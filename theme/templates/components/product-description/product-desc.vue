@@ -33,35 +33,9 @@
         </div>
       </template>
       <template v-else>
-        <div class="return">
-          Item is not returnable
-        </div>
+        <div class="return">Item is not returnable</div>
       </template>
     </div>
-    <template v-if="storeInfo !== null && storeInfo.marketplace_attributes">
-      <div
-        class="pdp-section"
-        v-for="(item, index) in storeInfo.marketplace_attributes"
-        :key="index + 'mr'"
-      >
-        <div
-          class="ukt-title title"
-          :style="`color: ${global_config.props.text_heading_link_color}`"
-        >
-          {{ item.title }}
-        </div>
-        <div class="pdp-detail" v-if="item.details.length > 0">
-          <div
-            class="pdp-table"
-            v-for="(property, val) in item.details"
-            :key="val + index + 'mr'"
-          >
-            <div class="prop regular-xs">{{ property.key }} :</div>
-            <div class="val regular-xxs" v-html="property.value"></div>
-          </div>
-        </div>
-      </div>
-    </template>
   </div>
 </template>
 

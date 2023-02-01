@@ -59,7 +59,10 @@
           <div class="out-of-stock-text bold-xxxxs">SOLD OUT</div>
         </div>
       </div>
-      <div class="product-desc" :class="{ 'disable-cursor': !product.sellable }">
+      <div
+        class="product-desc"
+        :class="{ 'disable-cursor': !product.sellable }"
+      >
         <!-- Product Rating -->
         <div style="height: 20px" v-if="product.rating">
           <fy-rating :rating="product.rating"></fy-rating>
@@ -67,6 +70,7 @@
         <!-- End of Product Rating -->
         <div class="card-desc">
           <h6
+            v-if="!hideBrandName"
             class="ukt-title"
             :style="`color: ${global_config.props.text_heading_link_color}`"
           >
@@ -124,17 +128,18 @@
   </fdk-product-card>
 </template>
 
+
 <script>
 import fyrating from "./../../global/components/fy-rating.vue";
 import { isBrowser } from "browser-or-node";
 import emergeImage from "../../global/components/common/emerge-image.vue";
-import SvgWrapper from './../../components/common/svg-wrapper.vue';
+import SvgWrapper from "./../../components/common/svg-wrapper.vue";
 
 export default {
   components: {
     "fy-rating": fyrating,
     "emerge-image": emergeImage,
-    "svg-wrapper": SvgWrapper
+    "svg-wrapper": SvgWrapper,
   },
   props: {
     product: {},
@@ -153,6 +158,7 @@ export default {
     listing_price_config: {
       type: String,
     },
+    page_config: {},
   },
 
   mounted() {
@@ -222,13 +228,19 @@ export default {
     },
   },
   computed: {
+    hideBrandName() {
+      return this.page_config?.props?.hidebrandname;
+    },
     imageUrl() {
       return this.product && this.product.medias.length > 0
         ? this.product.medias[0].url
         : "";
     },
     imageAlt() {
-      return this.product?.medias?.[0]?.alt || `${this.product.brand.name} | ${this.product.name}`;
+      return (
+        this.product?.medias?.[0]?.alt ||
+        `${this.product.brand.name} | ${this.product.name}`
+      );
     },
     showSizes: {
       get: function () {
@@ -255,6 +267,7 @@ export default {
   height: 100%;
   justify-content: flex-end;
   position: relative;
+  border: 1px solid #e4e5e6;
 }
 
 .product-card {
@@ -329,8 +342,7 @@ export default {
   }
 }
 .discount {
-  background: url("../../assets/images/special-badge.png")
-    bottom left no-repeat;
+  background: url("../../assets/images/special-badge.png") bottom left no-repeat;
 }
 .special-offer-text {
   text-align: left;
@@ -348,8 +360,8 @@ export default {
   }
 }
 .out-of-stock {
-  background: url("../../assets/images/special-badge-white.png")
-    bottom left no-repeat;
+  background: url("../../assets/images/special-badge-white.png") bottom left
+    no-repeat;
 }
 .out-of-stock-text {
   text-align: left;

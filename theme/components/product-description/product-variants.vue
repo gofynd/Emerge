@@ -14,24 +14,33 @@
         </template>
       </template>
       <template v-else>
-        <div class="ukt-title">{{ item.header }}</div>
-        <div v-if="item.display_type && item.display_type.includes('image')">
+        <div class="ukt-title">
+          {{ item.header }}
+        </div>
+        <div
+          v-if="item.display_type && item.display_type.includes('image')"
+        >
           <div class="variant-container">
             <div
               v-for="(variant, index) in item.items"
               :key="variant.slug + index"
               class="variant-item-image"
-              v-bind:class="{
-                variantsel: isVariantSelected(variant),
-                available: !variant.is_available,
+              :class="{
+                'selected': isVariantSelected(variant),
+                'unavailable': !variant.is_available,
               }"
             >
               <fdk-link :link="getProductLink(variant)">
                 <emerge-image
                   :src="getImageURL(variant)"
-                  :sources="[{ width: 50 }]"
+                  :sources="[{ width: 52 }]"
                   :alt="variant.name"
                 />
+                <div class="overlay"><span></span></div>
+                <svg-wrapper
+                  class="selected-icon"
+                  :svg_src="'selected'"
+                ></svg-wrapper>
               </fdk-link>
             </div>
           </div>
@@ -42,17 +51,24 @@
               v-for="(variant, index) in item.items"
               :key="variant.slug + index"
               class="variant-item-color"
-              v-bind:class="{
-                variantselcolor: isVariantSelected(variant),
-              }"
             >
-              <fdk-link :link="getProductLink(variant)">
+              <fdk-link :link="getProductLink(variant)" :title="variant.color_name">
                 <div
-                  v-bind:style="{
+                  :style="{
                     background: '#' + variant.color,
                   }"
                   class="color"
-                ></div>
+                  :class="{
+                    'selected': isVariantSelected(variant),
+                    'unavailable': !variant.is_available,
+                  }"
+                >
+                  <div class="overlay"><span></span></div>
+                  <svg-wrapper
+                    class="selected-icon"
+                    :svg_src="'selected'"
+                  ></svg-wrapper>
+                </div>
               </fdk-link>
             </div>
           </div>
@@ -63,9 +79,9 @@
               v-for="(variant, index) in item.items"
               :key="variant.slug + index"
               class="variant-item-text"
-              v-bind:class="{
-                variantsel: isVariantSelected(variant),
-                available: !variant.is_available,
+              :class="{
+                'selected': isVariantSelected(variant),
+                'unavailable': !variant.is_available,
               }"
             >
               <fdk-link :link="getProductLink(variant)">
@@ -85,86 +101,117 @@
 }
 .variant-container {
   display: flex;
+  align-items: center;
+  gap: 6px 8px;
   flex-wrap: wrap;
   padding: 5px 0px;
-  align-items: center;
   &::-webkit-scrollbar {
     display: none;
   }
-  .variant-item-image {
-    display: inline-block;
-    margin: 10px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    border: 1px dotted #c9c9c9;
-    box-sizing: content-box;
-    cursor: pointer;
+  .variant-item-image, .variant-item-color .color {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    padding: 1px;
+    border: 1px solid #c9c9c9;
+    @media @desktop {
+      width: 56px;
+      height: 56px;
+    }
+    &.selected{
+      border: 1px solid var(--primaryColor);
+    }
+    &:not(.selected){
+      .overlay, .selected-icon {
+        display: none;
+      }
+    }
+    &:is(.unavailable) {
+      .overlay {
+        display: block;
+        background: rgba(255, 255, 255, 0.7);
+        & > span {
+          position: absolute;
+          height: 80px;
+          width: 80px;
+          bottom: 0;
+          border-left: 1px solid #c9c9c9;
+          transform: rotate(45deg);
+          transform-origin: bottom left;
+        }
+      }
+    }
     &:hover {
-      border: 1px solid @PrimaryColor;
+      .overlay {
+        display: block;
+      }
     }
-    img {
-      width: 50px;
-      height: 78px;
-      display: flex;
+    .overlay {
+      background: rgba(255, 255, 255, 0.4);
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
     }
-    &.available {
-      border: 3px dotted #c9c9c9;
+    .selected-icon {
+      height: 25px;
+      width: 25px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      fill: @PrimaryColor;
     }
   }
+  .variant-item-image {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
   .variant-item-color {
-    margin: 0 5px;
-    &:first-child {
-      margin-left: 0;
-    }
-    &:last-child {
-      margin-right: 0;
-    }
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
     .color {
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      border: none;
+      width: 40px;
+      height: 40px;
     }
   }
   .variant-item-text {
     display: inline-block;
-    margin: 10px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    border-radius: 6px;
-    border: 1px dotted #c9c9c9;
-    box-sizing: border-box;
-    padding: 10px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    border: 1px solid #c9c9c9;
+    padding: 4px 12px;
+    color: @PrimaryColor;
     cursor: pointer;
-    &:hover {
-      border: 1px solid @PrimaryColor;
+    position: relative;
+    &:not(.unavailable):hover {
+      background-color: rgba(0, 0, 0, 0.05);
     }
-    &.available {
-      border: 3px dotted #c9c9c9;
+    &.selected {
+      background-color: rgba(0, 0, 0, 0.1);
+      border-color: @PrimaryColor;
     }
-  }
-  .variantsel {
-    border: 1px solid @PrimaryColor;
-    box-sizing: content-box;
-    border-radius: @border-radius;
-  }
-  .variantselcolor {
-    border-radius: 50%;
-    border: 1px solid black;
-  }
-  .available {
-    border-style: dotted;
+    &.unavailable {
+      color: #c9c9c9;
+      background: linear-gradient(to top left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) calc(50% - 0.8px), #c9c9c9 50%, rgba(0, 0, 0, 0) calc(50% + 0.8px), rgba(0, 0, 0, 0) 100%);
+    }
   }
 }
 </style>
 
 <script>
 import emergeImage from "./../../global/components/common/emerge-image.vue";
+import SvgWrapper from "../../components/common/svg-wrapper.vue";
 
 export default {
   name: "product-variants",
   components: {
     "emerge-image": emergeImage,
+    "svg-wrapper": SvgWrapper,
   },
   props: {
     variants: {
@@ -187,6 +234,9 @@ export default {
     getImageURL(item) {
       if (Array.isArray(item.medias) && item.medias.length > 0) {
         return item.medias[0].url;
+      }
+      if (Array.isArray(this.product.medias) && this.product.medias.length > 0) {
+        return this.product.medias[0].url;
       }
       return "";
     },

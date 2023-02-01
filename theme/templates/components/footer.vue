@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="main-footer"
-    :style="dynamicStyles"
-  >
+  <div class="main-footer" :style="dynamicStyles">
     <div class="main-footer__bottom" :style="getArtwork">
       <div class="about-block" v-if="context.description !== ''">
         <h5 class="footer-head">ABOUT US</h5>
@@ -107,23 +104,27 @@ export default {
     },
     dynamicStyles() {
       return {
-        "--footer_nav_hover_color":`${this.global_config?.props?.footer_nav_hover_color}`,
+        "--footer_nav_hover_color": `${this.global_config?.props?.footer_nav_hover_color}`,
         "border-top": `1px solid ${this.global_config?.props?.footer_border_color}`,
         "background-color": `${this.global_config?.props?.footer_bg_color}`,
-        "color": `${this.global_config?.props?.footer_text_color}`
+        color: `${this.global_config?.props?.footer_text_color}`,
       };
     },
     getArtwork() {
-      if(this.global_config?.props?.enable_artwork){
+      if (this.global_config?.props?.enable_artwork) {
         return {
-          "--background-desktop":`url(${this.global_config?.props?.artwork})`,
-          "--background-mobile":`${this.global_config?.props?.artwork_mweb ? `url(${this.global_config?.props?.artwork_mweb})`: ''}`,
+          "--background-desktop": `url(${this.global_config?.props?.artwork})`,
+          "--background-mobile": `${
+            this.global_config?.props?.artwork_mweb
+              ? `url(${this.global_config?.props?.artwork_mweb})`
+              : ""
+          }`,
           "background-repeat": "no-repeat",
           "background-size": "cover ",
           "background-position": "center",
-        }
+        };
       }
-    }
+    },
   },
 };
 </script>

@@ -20,7 +20,9 @@
       <fdk-empty-state :title="'Something went wrong'"></fdk-empty-state>
     </div>
     <template v-else-if="context && context.items">
-      <h1 class="collection-title" v-if="getPageConfigById('title')">{{context.product_meta.name}}</h1>
+      <h1 class="collection-title" v-if="getPageConfigById('title')">
+        {{ context.product_meta.name }}
+      </h1>
       <div class="mobile-header mobile">
         <div class="m-header">
           <div class="m-action-container" ref="mobileActionContainer">
@@ -488,8 +490,14 @@
                 </template>
               </fdk-filter-modal>
             </div>
-            <div class="collection-desc" v-if="getPageConfigById('description') && getPageConfigById('desc_position') === 'top'">
-              {{context.product_meta.description}}
+            <div
+              class="collection-desc"
+              v-if="
+                getPageConfigById('description') &&
+                getPageConfigById('desc_position') === 'top'
+              "
+            >
+              {{ context.product_meta.description }}
             </div>
             <fdk-infinite-loading class="plp-container">
               <template slot-scope="infiniteLoaderData">
@@ -498,9 +506,10 @@
                     v-for="(product, index) in getProducts"
                     :key="index + '-product.uid'"
                   >
-                    <fdk-link class="product-wrapper"
+                    <fdk-link
+                      class="product-wrapper"
                       :link="product.url"
-                      :target="!isMobile ? '_blank': ''"
+                      :target="!isMobile ? '_blank' : ''"
                       @click.native="redirectToProduct($event, product.url)"
                     >
                       <fy-product-card
@@ -511,6 +520,7 @@
                         @slide-down="slideDownEventListener($event)"
                         :global_config="global_config"
                         :listing_price_config="listingPriceConfig"
+                        :page_config="page_config"
                       ></fy-product-card>
                     </fdk-link>
                   </div>
@@ -522,8 +532,14 @@
                 </div>
               </template>
             </fdk-infinite-loading>
-            <div class="collection-desc" v-if="getPageConfigById('description') && getPageConfigById('desc_position') === 'bottom'">
-              {{context.product_meta.description}}
+            <div
+              class="collection-desc"
+              v-if="
+                getPageConfigById('description') &&
+                getPageConfigById('desc_position') === 'bottom'
+              "
+            >
+              {{ context.product_meta.description }}
             </div>
           </div>
         </template>
@@ -603,6 +619,13 @@
       "info": "Check to display Collection Description"
     },
     {
+      "type":"checkbox",
+      "id":"hidebrandname",
+      "label":"Hide Brand Name",
+      "default":false,
+      "info":"Check to hide Brand name"
+    },
+    {
       "type": "select",
       "id": "desc_position",
       "options": [
@@ -647,11 +670,11 @@ export default {
   },
   props: {
     context: {
-      type: Object
+      type: Object,
     },
-    page_config:{
-      type: Object
-    }
+    page_config: {
+      type: Object,
+    },
   },
 
   watch: {
@@ -906,9 +929,9 @@ export default {
 
 <style lang="less" scoped>
 .collection-title {
-    text-align: center;
-    font-size: 2.5rem;
-    margin: 0.8rem auto 1rem;
+  text-align: center;
+  font-size: 2.5rem;
+  margin: 0.8rem auto 1rem;
 }
 .plp-container {
   @media @tablet {
@@ -1048,7 +1071,7 @@ export default {
 }
 
 .product-wrapper {
-  border: 1px solid #e4e5e6;
+
   border-radius: 3px;
   box-sizing: border-box;
   height: 100%;
