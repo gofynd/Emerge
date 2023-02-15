@@ -16,3 +16,22 @@
   display: flex;
   justify-content: space-between;
 }
+
+.inset(@position) {
+  top: @position;
+  bottom: @position;
+  left: @position;
+  right: @position;
+}
+.aspect-ratio(@ratio) {
+  position: relative;
+  & > * {
+    position: absolute;
+    .inset(0);
+  }
+  &:before {
+    content: "";
+    display: block;
+    padding-bottom: 100% * (1 / @ratio);
+  }
+}

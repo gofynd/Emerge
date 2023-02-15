@@ -12,7 +12,7 @@ export const debounce = (func, wait, immediate) => {
 
         // The function to be called after
         // the debounce time has elapsed
-        var later = function() {
+        var later = function () {
             // null timeout to indicate the debounce ended
             timeout = null;
 
@@ -74,10 +74,10 @@ export const copyToClipboard = (str) => {
     document.body.appendChild(el); // Append the <textarea> element to the HTML document
     const selected =
         document.getSelection().rangeCount > 0 // Check if there is any content selected previously
-        ?
-        document.getSelection().getRangeAt(0) // Store selection if found
-        :
-        false; // Mark as false to know no selection existed before
+            ?
+            document.getSelection().getRangeAt(0) // Store selection if found
+            :
+            false; // Mark as false to know no selection existed before
     el.select(); // Select the <textarea> content
     document.execCommand("copy"); // Copy - only works as a result of a user action (e.g. click events)
     document.body.removeChild(el); // Remove the <textarea> element
@@ -104,13 +104,13 @@ export const differenceInDays = (start, end) => {
     } else if (difference > 30 && difference < 365) {
         resultString =
             Math.ceil(difference / 30) > 1 ?
-            `${Math.ceil(difference / 30)} months` :
-            `${Math.ceil(difference / 30)} month`;
+                `${Math.ceil(difference / 30)} months` :
+                `${Math.ceil(difference / 30)} month`;
     } else {
         resultString =
             Math.ceil(difference / 365) > 1 ?
-            `${Math.ceil(difference / 365)} years` :
-            `${Math.ceil(difference / 365)} year`;
+                `${Math.ceil(difference / 365)} years` :
+                `${Math.ceil(difference / 365)} year`;
     }
     return resultString;
 };
@@ -134,24 +134,24 @@ export const getPriceText = (product, key, options, listing_price_config) => {
     if (product && product.price) {
         switch (listing_price_config) {
             case "min":
-              price = options.filters.currencyformat(
-                product.price[key].min
-              );
-              break;
+                price = options.filters.currencyformat(
+                    product.price[key].min
+                );
+                break;
             case "max":
-              price = options.filters.currencyformat(
-                product.price[key].max
-              );
-              break;
+                price = options.filters.currencyformat(
+                    product.price[key].max
+                );
+                break;
             default:
-                price = product.price[key].min !== product.price[key].max ? 
+                price = product.price[key].min !== product.price[key].max ?
                     options.filters.currencyformat(product.price[key].min) +
                     " - " +
                     options.filters.currencyformat(product.price[key].max) :
                     options.filters.currencyformat(product.price[key].min);
-              //not handling this as its the default behaviour of getProductPrice
+                //not handling this as its the default behaviour of getProductPrice
                 break;
-          }
+        }
     }
     return price;
 };
@@ -167,22 +167,30 @@ export const hasDiscount = (product) => {
 };
 
 export const glidePaginate = (total, perpage) => {
-   
-    perpage=1;
+
+    perpage = 1;
     var pages = [];
     for (let i = 0; i < total; i = i + perpage) {
         pages.push(String(i));
-        
-        
+
+
     }
-   
+
     return pages;
 };
 
-export const logoUrl = function(logo, mobileLogo) {
+export const logoUrl = function (logo, mobileLogo) {
     let url = logo.secure_url;
     if (detectMobileWidth()) {
         url = mobileLogo ? mobileLogo.secure_url : url;
     }
     return url;
+};
+
+export const getGlobalConfigValue = function (global_config, id) {
+    return global_config?.props?.[id] || "";
+};
+
+export const getSectionPropValue = function (settings, id) {
+    return settings?.props?.[id]?.value || "";
 };
