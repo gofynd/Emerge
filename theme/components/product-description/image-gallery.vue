@@ -95,7 +95,7 @@
 <style lang="less" scoped>
 .gallery-box {
   // height: 100%;
-  min-height: 900px;
+  min-height: 500px;
   max-height: 950px;
   @media @tablet {
     min-height: 500px;
