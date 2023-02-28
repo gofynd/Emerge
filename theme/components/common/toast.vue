@@ -1,5 +1,5 @@
 <template>
-  <div class="toast" :id="id">{{ content }}</div>
+  <div :class="['toast', { 'show': show, 'hide': !show }]" :id="id">{{ content }}</div>
 </template>
 
 <script>
@@ -13,12 +13,17 @@ module.exports = {
       type: String
     }
   },
+  data() {
+    return {
+      show: false
+    }
+  },
   methods: {
     showToast: function showToast() {
-      var x = document.getElementById(this.id);
-      x.className = "toast show";
+      this.show = true;
+      const self = this;
       setTimeout(function() {
-        x.className = x.className.replace("toast show", "toast hide");
+        self.show = false;
       }, 3000);
     }
   },

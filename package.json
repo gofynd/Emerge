@@ -1,6 +1,6 @@
 {
     "name": "Emerge",
-    "version": "1.0.145",
+    "version": "1.0.146",
     "description": "theme",
     "main": "index.js",
     "scripts": {

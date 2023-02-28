@@ -343,7 +343,6 @@
 
           <!--Delivery Info-->
           <delivery-info
-            v-if="showUserPincodeModal || storeInfo"
             :showUserPincodeModal="showUserPincodeModal"
             :isExplicitelySelectedStore="isExplicitelySelectedStore"
             :storeInfo="storeInfo"
@@ -1082,7 +1081,6 @@ export default {
       }
     },
     sizeClicked(loadSellers) {
-      let promises = [];
       let options = {
         size: this.selectedSize,
         slug: this.context.product.slug,
@@ -1101,6 +1099,9 @@ export default {
         })
         .catch((err) => {
           this.loadSpinner = false;
+          this.selectedSize = ""
+          this.toast_message = err?.message || "Something went wrong";
+          this.$refs.pdpToast.showToast();
         });
     },
     redirectToReview() {
@@ -1129,11 +1130,6 @@ export default {
         return;
       }
 
-      let data = {
-        slug: this.context.product.slug,
-        size: this.selectedSize,
-        pincode: this.pincode,
-      };
       let addItemData = {
         items: [
           {
@@ -1147,19 +1143,23 @@ export default {
         ],
         buy_now: buyNow,
       };
-      cart.addToCart(addItemData).then((data) => {
-        if (data.success) {
-          if (this.$refs.carousel) {
-            this.$refs.carousel.$el.style.visibility = "hidden";
+      cart
+        .addToCart(addItemData)
+        .then((data) => {
+          if (data.success) {
+            if (this.$refs.carousel) {
+              this.$refs.carousel.$el.style.visibility = "hidden";
+            }
+            this.$router.push("/cart/bag");
+          } else {
+            this.toast_message = data?.message;
+            this.$refs.pdpToast.showToast();
           }
-          this.$router.push("/cart/bag");
-        } else {
-          this.toast_message = data?.message;
+        })
+        .catch((err) => {
+          this.toast_message = err?.message || "Something went wrong";
           this.$refs.pdpToast.showToast();
-        }
-      });
-      // })
-      // .catch(console.error);
+        });
     },
     onDialogClosed() {
       this.showUserPincodeModal = false;
