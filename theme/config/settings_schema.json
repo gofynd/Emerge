@@ -261,6 +261,14 @@
       "default": "",
       "category": "Footer",
       "label": "Footer Artwork (Mobile)"
+    },
+    {
+      "type": "checkbox",
+      "id":"backtotopbutton",
+      "category":"Back to Top",
+      "default":true,
+      "label":"scroll back to the top of the page",
+      "info":"Back To Top button to come back on top after scrolling down on the product listing, collection listing, brand/category/collection landing page."
     }
   ]
 }

@@ -543,6 +543,7 @@
         </transition>
       </div>
     </template>
+    <back-to-top  v-if="getGlobalConfigValue(global_config, 'backtotopbutton')"></back-to-top>
   </div>
 </template>
 
@@ -552,10 +553,11 @@ import fyselect from "./../../global/components/fy-select.vue";
 import fynotfound from "./../../global/components/fy-not-found.vue";
 import sliderfilter from "./../../global/components/fy-slider-filter.vue";
 import share from "./../../global/components/share.vue";
-import { detectMobileWidth } from "./../../helper/utils";
+import { detectMobileWidth, getGlobalConfigValue } from "./../../helper/utils";
 import { isBrowser } from "browser-or-node";
 import sortDD from "./../../global/components/plp/sort-dd";
 import SvgWrapper from "./../../components/common/svg-wrapper.vue";
+import BackToTop from '../../global/components/back-to-top.vue';
 
 export default {
   name: "fdk-plp",
@@ -567,6 +569,7 @@ export default {
     "sort-dd": sortDD,
     share,
     "svg-wrapper": SvgWrapper,
+    BackToTop,
   },
   props: {
     context: {},
@@ -626,6 +629,7 @@ export default {
     this.isMobile = detectMobileWidth();
   },
   methods: {
+    getGlobalConfigValue,
     hideShare() {
       this.showShare = false;
     },

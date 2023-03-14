@@ -1,7 +1,7 @@
 <template>
   <div v-if="render" :style="dynamicStyles">
     <h2
-      class="video-heading font-header"
+      class="video-heading font-header section-heading"
       v-if="getSectionPropValue(settings, 'title')"
     >
       {{ getSectionPropValue(settings, "title") }}
@@ -30,6 +30,7 @@
           preload="auto"
           v-if="isMp4(getVideoSource()) || isGdrive()"
           v-show="!isLoading"
+          @progress="isLoading = false"
         >
           <source :src="getVideoSource()" type="video/mp4" allowfullscreen />
         </video>
@@ -521,11 +522,11 @@ export default {
   left: 50%;
   display: none;
   ::v-deep svg {
-      width: 80px;
-      height: 80px;
-      opacity: 0.5;
-      cursor: pointer;
-    }
+    width: 80px;
+    height: 80px;
+    opacity: 0.5;
+    cursor: pointer;
+  }
   ::v-deep path {
     fill: white;
   }

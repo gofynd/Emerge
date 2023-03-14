@@ -45,7 +45,8 @@
           v-else-if="context.collections && context.collections.items && context.collections.items.length === 0 && isMounted"
           :title="'No Collections Found'"
     ></fdk-empty-state>
-  </div>
+    <back-to-top v-if="getGlobalConfigValue(global_config, 'backtotopbutton')"></back-to-top>
+  </div> 
 </template>
 <!-- #region  -->
 
@@ -77,6 +78,8 @@
 import groupList from "./../../global/components/group-list.vue";
 import emergeImage from "./../../global/components/common/emerge-image.vue";
 import placeholderItemsVue from "../../global/components/sections/placeholder-items.vue";
+import { getGlobalConfigValue } from "../../helper/utils";
+import BackToTop from '../../global/components/back-to-top.vue';
 
 export default {
   data() {
@@ -90,6 +93,7 @@ export default {
     "group-list": groupList,
     "emerge-image": emergeImage,
     "placeholder-items": placeholderItemsVue,
+    BackToTop,
   },
   watch: {
     settings: function (newVal, oldVal) {},
@@ -97,6 +101,9 @@ export default {
   mounted() {
     this.isMounted = true
   },
+  methods: {
+    getGlobalConfigValue,
+  }
 };
 </script>
 
