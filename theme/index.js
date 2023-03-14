@@ -21,14 +21,6 @@ export default {
     import(
       /*webpackChunkName:"extras" */ "./templates/components/screen-saver.vue"
     ),
-  getProductReviews: () =>
-    import(
-      /*webpackChunkName:"extras" */ "./templates/pages/product-reviews.vue"
-    ),
-  getAddProductReview: () =>
-    import(
-      /*webpackChunkName:"extras" */ "./templates/pages/add-product-review.vue"
-    ),
   getFaq: () =>
     import(/*webpackChunkName:"extras" */ "./templates/pages/faq.vue"),
 
