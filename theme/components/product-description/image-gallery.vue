@@ -81,6 +81,7 @@
       <mobile-carousel
         ref="carousel"
         :images="images"
+        :key="rerenderGlide"
         v-on:clickimage="openGallery"
       ></mobile-carousel>
     </div>
@@ -257,6 +258,7 @@ export default {
       type: this.images[0].type,
       alt: this.images?.[0]?.alt || `${this.product?.brand?.name} | ${this.product?.name} ${this.currentImageIndex}`,
       isFrameLoading: true,
+      rerenderGlide: true,
     };
   },
   mounted() {
@@ -264,6 +266,7 @@ export default {
   },
   watch: {
     images(newVal) {
+      this.rerenderGlide = !this.rerenderGlide;
       this.src = newVal[0] && newVal[0].url;
       this.type = newVal[0] && newVal[0].type;
       this.alt = newVal?.[0]?.alt || `${this.product?.brand?.name} | ${this.product?.name} ${this.currentImageIndex}`;
