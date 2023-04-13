@@ -12,13 +12,17 @@
               >&nbsp;Edit Pincode</a
             >
           </span>
-           <p class="error light-xxs" v-if="pincodeError">
-                    {{ errMsg }}
-                  </p>
+          <p class="error light-xxs" v-if="pincodeError">
+            {{ errMsg }}
+          </p>
         </div>
         <template
           v-if="
-            storeInfo && deliveryInfo && deliveryInfo.minDeliveryDate && !error && !pincodeError
+            storeInfo &&
+            deliveryInfo &&
+            deliveryInfo.minDeliveryDate &&
+            !error &&
+            !pincodeError
           "
         >
           <div
@@ -66,15 +70,15 @@
   margin: 20px 0px 30px 0px;
   .ukt-links {
     .user-select-none();
-    font-size:15px;
+    font-size: 15px;
   }
 }
 .delivery-date {
   color: @Mako;
 }
 .error {
-    color: @Required;
-  }
+  color: @Required;
+}
 </style>
 
 <script>
@@ -93,13 +97,14 @@ export default {
     context: {},
     showUserPincodeModal: "",
     isExplicitelySelectedStore: "",
-    pincode: ""
+    pincode: "",
+    pincodeError: { type: Boolean, default: false },
   },
   watch: {
     storeInfo() {
       if (this.storeInfo) {
         this.fromPincode = `${this.storeInfo.pincode}`;
-        this.toPincode = this.pincode
+        this.toPincode = this.pincode;
         this.getTatInfo();
       }
     },
@@ -111,10 +116,9 @@ export default {
     return {
       toPincode: this.pincode || "",
       fromPincode: "",
-      errMsg:null,
+      errMsg: null,
       addressModal: false,
       tatInfo: {},
-      pincodeError: false,
       deliveryInfo: {},
       error: false,
       isMounted: false,
@@ -131,13 +135,12 @@ export default {
   },
   methods: {
     onCloseDialog() {
-
-      this.pincodeError =false;
+      this.$emit("togglePincodeError", false);
       this.addressModal = false;
       this.$emit("dialogClosed");
     },
     getPincode() {
-        return this.toPincode;
+      return this.toPincode;
     },
     showTatError(err) {
       this.$emit("showTatError", err.message);
@@ -162,13 +165,15 @@ export default {
           categoryId: this.id,
           store_id: this.storeInfo.store.uid,
         };
-        this.$refs["pdpPincode"]?.getTat(this.tatInfo).then((res) => {
-          this.deliveryInfo = res;
-        })
-        .catch((err) => {
-          this.pincodeError=true;
+        this.$refs["pdpPincode"]
+          ?.getTat(this.tatInfo)
+          .then((res) => {
+            this.deliveryInfo = res;
+          })
+          .catch((err) => {
+            this.$emit("togglePincodeError", true);
             this.$emit("showTatError", err.message);
-             this.errMsg = err.message;
+            this.errMsg = err.message;
             this.isPinCodeValid = false;
           });
       }

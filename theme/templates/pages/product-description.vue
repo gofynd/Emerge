@@ -46,24 +46,26 @@
             v-if="page_config && page_config.props.share"
           >
             <template slot-scope="share">
-              <div class="share-button" @click="getShareLink(share)">
-                <div class="svg-wrapper">
-                  <svg-wrapper
-                    :svg_src="'share'"
-                    class="share-img"
-                  ></svg-wrapper>
+              <div>
+                <div class="share-button" @click="getShareLink(share)">
+                  <div class="svg-wrapper">
+                    <svg-wrapper
+                      :svg_src="'share'"
+                      class="share-img"
+                    ></svg-wrapper>
+                  </div>                
                 </div>
                 <transition name="fade">
-                  <share
-                    :title="`Spread the shopping delight! Scan QR & share this ${context.product.brand.name} product with
+                    <share
+                      :title="`Spread the shopping delight! Scan QR & share this ${context.product.brand.name} product with
                               your loved ones`"
-                    :shareLoading="shareLoading"
-                    :qr_code="qr_code"
-                    @close-share="showShare = false"
-                    v-if="showShare"
-                    :share_link="share_link"
-                  />
-                </transition>
+                      :shareLoading="shareLoading"
+                      :qr_code="qr_code"
+                      @close-share="showShare = false"
+                      v-if="showShare"
+                      :share_link="share_link"
+                    />
+                  </transition>
               </div>
             </template>
           </fdk-share>
@@ -217,7 +219,8 @@
                 v-if="
                   storeInfoSelected &&
                   storeInfoSelected.store &&
-                  storeInfoSelected.store.name
+                  storeInfoSelected.store.name &&
+                  !pincodeError
                 "
               >
                 <div class="seller-name regular-xxs" v-if="showSellers">
@@ -354,6 +357,8 @@
             @showTatError="onTatError($event)"
             @hideTatError="onHideTatError"
             :pincode="pincode"
+            :pincodeError="pincodeError"
+            @togglePincodeError="togglePincodeError"
           ></delivery-info>
 
           <compare-action-modal
@@ -923,6 +928,9 @@ export default {
     },
   },
   methods: {
+    togglePincodeError(value) {
+      this.pincodeError = value;
+    },
     getLadderOffers() {
       this.$refs.cart
         .getLadderOffers({
@@ -1091,17 +1099,23 @@ export default {
 
       loadSellers(options)
         .then((res) => {
-          this.storeInfo = res;
-          this.store_count = res.store.count;
-          this.showSoldByModal = true;
-          this.loadSpinner = false;
-          this.getLadderOffers();
+          if (res && Object.keys(res).length) {
+            this.storeInfo = res;
+            this.store_count = res.store.count;
+            this.showSoldByModal = true;
+            this.loadSpinner = false;
+            this.getLadderOffers();
+            this.pincodeError = false;
+          } else {
+            return Promise.reject();
+          }
         })
         .catch((err) => {
           this.loadSpinner = false;
-          this.selectedSize = ""
+          this.selectedSize = "";
           this.toast_message = err?.message || "Something went wrong";
           this.$refs.pdpToast.showToast();
+          this.pincodeError = true;
         });
     },
     redirectToReview() {

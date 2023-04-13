@@ -167,7 +167,7 @@
                   >
                     LOGIN
                   </white-splash-button>
-                  <div
+                  <white-splash-button
                     v-if="
                       isAnonymous &&
                       page_config &&
@@ -179,28 +179,29 @@
                       disable: !context.bag_data.is_valid,
                       'disable-btn': getGstError,
                     }"
+                    :style="`background-color:var(--buttonSecondary);color:var(--buttonPrimary);border: 1px solid var(--buttonPrimary)`"
                   >
                     Continue as Guest ?
-                  </div>
+                  </white-splash-button>
                 </div>
                 <div class="agree-terms">
                   By continuing, I agree to the
-                    <fdk-link
-                        :target="`_blank`"
-                        class="link"
-                        :link="`/terms-and-conditions`"
-                      >
-                        Terms of Use
-                      </fdk-link>
-                      &
-                      <fdk-link
-                        :target="`_blank`"
-                        class="link"
-                        :link="`/privacy-policy`"
-                      >
-                        Privacy Policy
-                    </fdk-link>
-                  </div>
+                  <fdk-link
+                    :target="`_blank`"
+                    class="link"
+                    :link="`/terms-and-conditions`"
+                  >
+                    Terms of Use
+                  </fdk-link>
+                  &
+                  <fdk-link
+                    :target="`_blank`"
+                    class="link"
+                    :link="`/privacy-policy`"
+                  >
+                    Privacy Policy
+                  </fdk-link>
+                </div>
               </template>
             </fdk-accounts>
           </div>
@@ -841,8 +842,6 @@ export default {
   }
   .guest-chkout {
     text-align: center;
-    padding: 15px 0 0 0;
-    text-decoration: underline;
     cursor: pointer;
     &.disable {
       display: none;
