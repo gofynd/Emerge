@@ -22,6 +22,7 @@
                 <button
                   class="button bold-sm"
                   @click="checkPincode(pincodeAct)"
+                  :style="`background-color:var(--buttonSecondary);color:var(--buttonPrimary);border: 1px solid var(--buttonPrimary)`"
                 >
                   CHECK
                 </button>

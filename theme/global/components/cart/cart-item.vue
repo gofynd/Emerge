@@ -57,7 +57,7 @@
                 </div>
                 <chip-item
                   class="desktop"
-                  :item="item"
+                  :item="getItem"
                   :chiptype="'bag'"
                   @remove-cart="modalHandle"
                   @update-cart="updateCart"
@@ -148,6 +148,9 @@ export default {
     modal,
   },
   computed:{
+    getItem(){
+      return this.item
+    },
     isLadderPricing() {
       let getLadderPricing= this.item?.promotions_applied.find(val=>val.promotion_type== "ladder_price");
       return getLadderPricing;

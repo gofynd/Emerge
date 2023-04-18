@@ -50,7 +50,7 @@
           <div class="left">
             <div class="cart__items">
               <cart-item
-                v-for="(item, index) in context.bag_data.items"
+                v-for="(item, index) in getBagItem"
                 :key="index"
                 :item="item"
                 :cart="cart"
@@ -343,6 +343,9 @@ export default {
     };
   },
   computed: {
+    getBagItem(){
+      return this.context.bag_data.items;
+    },
     getGstError() {
       return this.gstin.showerror;
     },

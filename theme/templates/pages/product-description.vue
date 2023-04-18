@@ -53,19 +53,19 @@
                       :svg_src="'share'"
                       class="share-img"
                     ></svg-wrapper>
-                  </div>                
+                  </div>
                 </div>
                 <transition name="fade">
-                    <share
-                      :title="`Spread the shopping delight! Scan QR & share this ${context.product.brand.name} product with
+                  <share
+                    :title="`Spread the shopping delight! Scan QR & share this ${context.product.brand.name} product with
                               your loved ones`"
-                      :shareLoading="shareLoading"
-                      :qr_code="qr_code"
-                      @close-share="showShare = false"
-                      v-if="showShare"
-                      :share_link="share_link"
-                    />
-                  </transition>
+                    :shareLoading="shareLoading"
+                    :qr_code="qr_code"
+                    @close-share="showShare = false"
+                    v-if="showShare"
+                    :share_link="share_link"
+                  />
+                </transition>
               </div>
             </template>
           </fdk-share>
@@ -171,8 +171,7 @@
                     inactive: !size.is_available,
                   }"
                   @click="
-                    selectedSize = size.display;
-                    onSizeClicked(sellerData);
+                    onSizeClicked(size, sellerData);
                     sizeError = false;
                   "
                 >
@@ -629,6 +628,19 @@
       "label": "Price tax label text"
     },
     {
+      "type": "text",
+      "id": "default_pincode",
+      "label": "Default Pincode",
+      "default": ""
+    },
+    {
+      "type": "checkbox",
+      "id": "default_size",
+      "label": "Default Size",
+      "default": true,
+      "info": "Add default size"
+    },
+    {
       "type": "checkbox",
       "id": "share",
       "label": "Share",
@@ -817,9 +829,13 @@ export default {
       shippable: false,
       showSizeGuide: false,
       pincodeError: false,
+      pincodeErrorMsg: "",
       sizeError: false,
       pincodeSuccess: false,
-      pincode: this.context.user_pincode || "",
+      pincode:
+        this.context.user_pincode ||
+        this.page_config?.props?.default_pincode ||
+        "",
       isMounted: false,
       fromPincode: null,
       toast_message: "",
@@ -981,15 +997,21 @@ export default {
       return this.page_config.props?.extension?.[position] || [];
     },
     preSizeSelect() {
-      if (
-        this.context?.product_meta?.sizes?.length === 1 &&
-        this.context?.product_meta?.sizes[0]?.is_available
-      ) {
-        if (this.context?.user_pincode) {
-          this.selectedSize = this.context?.product_meta?.sizes[0]?.display;
-          this.sizeClicked(this.$refs?.sizeContainer?.loadSellers);
+      if (this.page_config?.props?.default_size) {
+        const sizes = this.context?.product_meta?.sizes || [];
+        const firstAvailableSize = sizes.find((size) => size.is_available);
+        if (firstAvailableSize) {
+          this.$nextTick(() => {
+            let self = this;
+            self.onSizeClicked(firstAvailableSize, self.$refs?.sizeContainer);
+          });
         }
-        this.sizeError = false;
+        if (
+          !this.page_config?.props?.default_pincode &&
+          !this.context?.user_pincode
+        ) {
+          this.showUserPincodeModal = true;
+        }
       }
     },
     getShareLink(share) {
@@ -1080,7 +1102,8 @@ export default {
         })
         .catch((err) => {});
     },
-    onSizeClicked(sellerData) {
+    onSizeClicked(size, sellerData) {
+      this.selectedSize = size.display;
       this.isExplicitelySelectedStore = false;
       if (!this.pincode) {
         this.showUserPincodeModal = true;
@@ -1094,7 +1117,6 @@ export default {
         slug: this.context.product.slug,
         pincode: this.pincode,
       };
-
       this.loadSpinner = true;
 
       loadSellers(options)
@@ -1112,10 +1134,12 @@ export default {
         })
         .catch((err) => {
           this.loadSpinner = false;
-          this.selectedSize = "";
+          this.pincodeErrorMsg = err?.message || "Something went wrong";
           this.toast_message = err?.message || "Something went wrong";
           this.$refs.pdpToast.showToast();
           this.pincodeError = true;
+          this.storeInfo = null;
+          this.storeInfoSelected = {};
         });
     },
     redirectToReview() {
@@ -1142,6 +1166,14 @@ export default {
           window.scrollTo(0, 0);
         }
         return;
+      } else if (this.pincodeError) {
+        this.toast_message = this.pincodeErrorMsg || "Something went wrong";
+        this.$refs.pdpToast.showToast();
+        if (window.innerWidth < 780) {
+          var top = this.$refs.sizeContainer.offsetTop;
+          window.scrollTo(0, 0);
+        }
+        return;
       }
 
       let addItemData = {
@@ -1150,9 +1182,9 @@ export default {
             item_id: this.context.product.uid,
             item_size: this.selectedSize,
             quantity: 1,
-            article_assignment: this.storeInfo.article_assignment,
-            seller_id: this.storeInfo.seller.uid,
-            store_id: this.storeInfo.store.uid,
+            article_assignment: this.storeInfo?.article_assignment,
+            seller_id: this.storeInfo?.seller.uid,
+            store_id: this.storeInfo?.store.uid,
           },
         ],
         buy_now: buyNow,
@@ -1266,19 +1298,23 @@ export default {
   width: 24px;
   height: 24px;
 }
+
 .notify-btn {
   display: flex;
   align-items: center;
   justify-content: center;
+
   img {
     margin-right: 10px;
   }
 }
+
 .inactive {
   opacity: 0.4;
   cursor: auto;
   pointer-events: none;
 }
+
 .share-like-box {
   position: absolute;
   right: 30px;
@@ -1288,8 +1324,10 @@ export default {
     margin-bottom: 10px;
     margin-left: 2px;
   }
+
   .share-button {
     cursor: pointer;
+
     .share-img {
       position: relative;
       height: 24px;
@@ -1297,15 +1335,18 @@ export default {
     }
   }
 }
+
 .review-container {
   background-color: @White;
   padding: 20px 20px 20px 0;
   margin-top: 20px;
+
   .rate-prod-btn {
     display: block;
     text-align: center;
     margin: 10px 0 0 0;
   }
+
   &__title {
     font-size: 1.5625rem;
     font-weight: 600;
@@ -1314,14 +1355,17 @@ export default {
     display: flex;
     justify-content: center;
     color: @color-black;
+
     @media @mobile {
       font-size: 1.2rem;
     }
+
     a {
       padding: 0 0 0 20px;
       text-transform: capitalize;
     }
   }
+
   .add-review {
     // text-transform: uppercase;
     font-size: 14px;
@@ -1344,49 +1388,61 @@ export default {
     align-items: center;
     border-bottom: 1px solid;
     cursor: pointer;
+
     p {
       margin-right: 10px;
     }
   }
 }
+
 .product-rating-count {
   // margin-bottom: 20px;
   margin-bottom: 0.78125rem;
 }
+
 .book-appt-n-compare {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 25px 0 0 0;
+
   @media @tablet {
     flex-direction: column;
   }
+
   > :first-child {
     flex: 0 0 51%;
+
     @media @tablet {
       width: 100%;
     }
   }
+
   > :nth-child(2) {
     flex: 0 0 43%;
+
     @media @tablet {
       width: 100%;
       margin-top: 20px;
     }
   }
 }
+
 .seller-info {
   margin-bottom: 5px;
   line-height: 20px;
+
   .seller-name {
     // color: #41434c;
     padding: 5px 0;
+
     .store-seller {
       text-overflow: ellipsis;
       overflow: hidden;
     }
   }
 }
+
 .compare-container {
   display: flex;
   align-items: center;
@@ -1396,22 +1452,28 @@ export default {
   font-size: 14px;
   padding: 12.5px 0;
   cursor: pointer;
+
   .compare-icon {
     padding: 0 5px;
+
     .a,
     .d {
       fill: none;
     }
+
     .a {
       stroke: var(--button_tertiary_label_color);
       stroke-width: 0.8px;
     }
+
     .b {
       fill: var(--button_tertiary_label_color);
     }
+
     .c {
       stroke: none;
     }
+
     img {
       width: 18px;
     }
@@ -1419,22 +1481,32 @@ export default {
 }
 
 .product-details-right {
-  -webkit-column-count: 1; /* Chrome, Safari, Opera */
-  -moz-column-count: 1; /* Firefox */
+  -webkit-column-count: 1;
+  /* Chrome, Safari, Opera */
+  -moz-column-count: 1;
+  /* Firefox */
   column-count: 1;
+
   @media @mobile {
-    -webkit-column-count: 12; /* Chrome, Safari, Opera */
-    -moz-column-count: 1; /* Firefox */
+    -webkit-column-count: 12;
+    /* Chrome, Safari, Opera */
+    -moz-column-count: 1;
+    /* Firefox */
     column-count: 1;
   }
+
   &.columns1 {
-    -webkit-column-count: 12; /* Chrome, Safari, Opera */
-    -moz-column-count: 1; /* Firefox */
+    -webkit-column-count: 12;
+    /* Chrome, Safari, Opera */
+    -moz-column-count: 1;
+    /* Firefox */
     column-count: 1;
   }
+
   .product-attr-table {
     min-width: 320px;
     box-sizing: border-box;
+
     tr {
       // border-bottom: 1px solid #e4e4e4;
       text-align: left;
@@ -1442,6 +1514,7 @@ export default {
       -webkit-column-break-inside: avoid;
       page-break-inside: avoid;
       break-inside: avoid;
+
       td {
         height: 40px;
         text-align: left;
@@ -1452,6 +1525,7 @@ export default {
         word-break: break-word;
         text-transform: capitalize;
       }
+
       .key {
         font-weight: 700;
         // background-color: #f3f3f3;
@@ -1464,73 +1538,89 @@ export default {
 /deep/.product-details {
   margin-top: 20px;
   padding: 0 20px 20px 20px;
+
   h2 {
     text-align: center;
     padding: 20px 0;
     font-size: 1.5625rem;
     font-weight: 600;
   }
+
   .product-long-description {
     line-height: 20px;
     font-size: 14px;
     overflow-wrap: break-word;
+
     b {
       font-weight: 700;
       margin-top: 25px;
       display: block;
     }
+
     br {
       content: "";
       display: block;
       margin-bottom: 10px;
     }
+
     p {
       margin-bottom: 10px;
       line-height: 20px;
+
       img {
         margin: 10px 0;
       }
     }
+
     video {
       max-width: 100% !important;
     }
   }
 }
+
 .product__attributes--item {
   display: flex;
   align-items: center;
 }
+
 .main-container {
   background-color: @color-white;
   padding: 1.5625rem;
   margin-top: 1.5625rem;
+
   @media @mobile {
     padding: 0;
     margin-top: 0;
   }
+
   .product-desc-container {
     display: flex;
     justify-content: space-between;
     box-sizing: border-box;
     overflow: hidden;
+
     @media @tablet {
       flex-direction: column;
     }
+
     .left {
       flex: 0 0 58%;
       overflow: hidden;
     }
+
     .right {
       flex: 0 0 40.5%;
       padding: 20px;
       box-sizing: border-box;
       position: relative;
       overflow: hidden;
+
       @media @mobile {
         width: 100%;
         padding: 1.25rem;
         box-sizing: border-box;
       }
+
       .preview {
         display: none;
         position: absolute;
@@ -1538,49 +1628,60 @@ export default {
         margin-top: 15px;
         width: 100%;
       }
+
       .product {
         &__title {
           font-size: 1.5625rem;
           margin-bottom: 0.3125rem;
           padding-right: 35px;
+
           @media @tablet {
             padding-right: 45px;
           }
         }
+
         .tax-label {
           line-height: 20px;
           margin-top: 10px;
         }
+
         &__price {
           font-size: 1.125rem;
           margin-bottom: 0.625rem;
+
           &--marked {
             margin-right: 0.9375rem;
             text-decoration: line-through;
             opacity: 0.8;
           }
+
           .mrp-label {
             margin-right: 5px;
           }
         }
+
         &__size {
           margin-bottom: 0.625rem;
+
           &--text {
             // color: @color-gray-2;
             font-size: 0.75rem;
             line-height: 1.0625rem;
           }
+
           &--guide {
             cursor: pointer;
             margin-top: 0.625rem;
             font-weight: bold;
             width: 110px;
           }
+
           .size-list {
             display: flex;
             font-size: 1rem;
             margin-top: 0.625rem;
             flex-wrap: wrap;
+
             &__item {
               padding: 0.3125rem 4px;
               margin-right: 0.625rem;
@@ -1593,6 +1694,7 @@ export default {
               overflow: hidden;
               text-overflow: ellipsis;
               margin-bottom: 10px;
+
               &--selected {
                 background-color: @primary-color;
                 color: @color-white;
@@ -1601,6 +1703,7 @@ export default {
             }
           }
         }
+
         &__actions {
           margin-top: 1.875rem;
 
@@ -1616,8 +1719,10 @@ export default {
             transition: all 0.4s;
           }
         }
+
         &__pincode {
           margin-top: 2.1875rem;
+
           .delivery-options {
             color: #1d1d1d;
             font-size: 0.75rem;
@@ -1625,23 +1730,28 @@ export default {
             line-height: 18px;
             text-transform: uppercase;
           }
+
           .input-wrapper {
             position: relative;
             display: flex;
             margin-top: 1em;
           }
+
           .pincode-input {
             width: 35%;
+
             @media @mobile {
               width: 100%;
               box-sizing: border-box;
             }
+
             height: 40px;
             padding: 0 1em;
             font-size: 14px;
             border: 1px solid #000000;
             color: #000000;
           }
+
           .check-btn {
             font-size: 14px;
             letter-spacing: 0.06px;
@@ -1651,6 +1761,7 @@ export default {
             left: 29%;
             top: 10px;
           }
+
           .spinner {
             width: 48px;
             height: 40px;
@@ -1658,37 +1769,47 @@ export default {
             padding-left: 10px;
           }
         }
+
         &__attributes {
           font-size: 0.875rem;
           color: @color-gray;
+
           h3 {
             color: @color-black;
           }
+
           &--item {
             @media @mobile {
               display: flex;
               width: 100%;
             }
+
             span {
               display: inline-block;
               min-width: 9.375rem;
+
               @media @mobile {
                 width: 100%;
               }
+
               white-space: pre-wrap;
             }
+
             span.html {
               display: inline-block;
               min-width: 9.375rem;
               white-space: nowrap;
+
               @media @mobile {
                 width: 100%;
               }
             }
           }
+
           .attr-para {
             margin-bottom: 0.9375rem;
             display: flex;
+
             @media @mobile {
               // flex-direction: column;
             }
@@ -1697,6 +1818,7 @@ export default {
       }
     }
   }
+
   .similar {
     &__title {
       margin-top: 3.125rem;
@@ -1704,22 +1826,27 @@ export default {
       text-align: center;
       //   text-transform: uppercase;
       font-weight: 600;
+
       @media @mobile {
         font-size: 1.2rem;
       }
     }
+
     &__products {
       display: flex;
       flex-wrap: wrap;
       margin-top: 3.125rem;
+
       @media @mobile {
         padding: 1.5625rem;
         box-sizing: border-box;
         margin-top: 0;
       }
+
       &--item {
         &:not(:last-child) {
           margin-right: 20px;
+
           @media @mobile {
             margin-right: 0;
           }
@@ -1728,14 +1855,17 @@ export default {
     }
   }
 }
+
 .atr_key {
   &::after {
     content: ":";
+
     @media @mobile {
       content: "";
     }
   }
 }
+
 .ladder-pricing {
   margin-top: 10px;
 }

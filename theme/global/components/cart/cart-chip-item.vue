@@ -17,8 +17,9 @@
                   v-for="(opt, index) in arrSizes"
                   :key="index"
                   :selected="opt === item.article.size"
-                  >{{ opt }}</option
                 >
+                  {{ opt }}
+                </option>
               </select>
             </div>
             <div class="price-cntr">
@@ -94,7 +95,7 @@
         <div
           v-if="
             (chiptype === 'pdp' || chiptype === 'bag') &&
-              item.availability.out_of_stock
+            item.availability.out_of_stock
           "
           class="chip out-of-stock regular-xxs"
         >
@@ -119,7 +120,7 @@
 
 <script>
 import quantityctrl from "./quantity-ctrl.vue";
-import SvgWrapper from './../../../components/common/svg-wrapper.vue';
+import SvgWrapper from "./../../../components/common/svg-wrapper.vue";
 export default {
   name: "bag-chip-item",
   props: {
@@ -132,7 +133,7 @@ export default {
   },
   components: {
     "quantity-ctrl": quantityctrl,
-    "svg-wrapper": SvgWrapper
+    "svg-wrapper": SvgWrapper,
   },
   methods: {
     updateCart(total, func, item, operation) {
@@ -144,17 +145,17 @@ export default {
           : operation === "dec"
           ? total - 1
           : total;
-      if (stotal > this.item.article.quantity&&operation === "inc") {
+      if (stotal > this.item.article.quantity && operation === "inc") {
         this.$refs["qty"].resetQuantity(item.quantity);
         this.showQuantityError = true;
         setTimeout(() => {
           this.showQuantityError = false;
         }, 3000);
         return;
-      }else if(stotal > this.item.article.quantity&&operation === "dec"){
-        item.quantity=this.item.article.quantity+1
+      } else if (stotal > this.item.article.quantity && operation === "dec") {
+        item.quantity = this.item.article.quantity + 1;
         this.showQuantityError = false;
-      }  else {
+      } else {
         this.showQuantityError = false;
       }
       this.$emit("update-cart", { func, item, operation });
@@ -211,17 +212,20 @@ export default {
       };
       this.showQuantityError = false;
       this.updateCart(quantity, cart.updateCart, data, "qty");
-    }
+    },
+  },
+  computed: {
+    arrSizes() {
+      return this.item.availability.sizes.filter(
+        (it) => it === this.item.article.size
+      ).length > 0
+        ? this.item.availability.sizes
+        : [].concat(this.item.article.size);
+    },
   },
   data() {
     return {
       showQuantityError: false,
-      arrSizes:
-        this.item.availability.sizes.filter(
-          (it) => it === this.item.article.size
-        ).length > 0
-          ? this.item.availability.sizes
-          : [].concat(this.item.article.size),
     };
   },
 };
