@@ -10,7 +10,6 @@
     <div class="card-container">
       <div class="top-items" v-if="banner_image">
         <fdk-link :link="settings.props.banner_link && settings.props.banner_link.value || ''">
-          <!-- <img :src="banner_image" /> -->
           <emerge-image 
           v-if="banner_image" 
           :src="banner_image" 
@@ -101,10 +100,8 @@ export default {
   margin: 0;
 }
 .top-items {
-  // padding: 14px;
   border-radius: @border-radius;
   background: @White;
-  // margin: 20px 0px;
   /deep/ .fy__img {
     width: 100%;
   }

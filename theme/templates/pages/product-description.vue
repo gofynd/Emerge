@@ -123,25 +123,6 @@
             v-if="getTemplates('below_price_component').length"
             :templates="getTemplates('below_price_component')"
           />
-
-          <div
-            v-if="
-              context &&
-              context.product &&
-              context.product.rating &&
-              context.product.rating_count &&
-              page_config &&
-              page_config.props.ratings
-            "
-            class="product-rating-count"
-          >
-            <span>
-              <rating-star :stars="context.product.rating" :size="'small'" />
-            </span>
-            <span style="font-size: 14px">
-              {{ context.product.rating_count }} ratings
-            </span>
-          </div>
           <store-coupon
             :bulkPrices="context.bulk_prices"
             v-if="!context.bulk_prices.loading && page_config.props.bulk_prices"
@@ -440,85 +421,6 @@
         :content="context.product.description"
       ></fdk-html-content>
     </div>
-    <div>
-      <no-ssr>
-        <fdk-accounts class="rate-prod-btn">
-          <template slot-scope="accountsData">
-            <fdk-add-review
-              :product_type="context.product.type"
-              :product_uid="context.product.uid"
-            >
-              <template slot-scope="reviewData">
-                <div
-                  class="review-container"
-                  v-if="
-                    checkReview ||
-                    (context.is_logged_in &&
-                      page_config &&
-                      page_config.props.reviews &&
-                      reviewData.isEligible)
-                  "
-                >
-                  <div>
-                    <p
-                      class="review-container__title"
-                      :style="
-                        'color:' + global_config.props.text_heading_link_color
-                      "
-                    >
-                      Ratings & Reviews
-                    </p>
-
-                    <a
-                      class="add-review"
-                      v-if="reviewData.isEligible && context.is_logged_in"
-                      @click="
-                        context.is_logged_in
-                          ? redirectToAddReview()
-                          : accountsData.openLogin()
-                      "
-                    >
-                      Rate Product
-                    </a>
-
-                    <review-list
-                      v-if="
-                        context &&
-                        context.reviews &&
-                        context.reviews.data &&
-                        context.reviews.data.length &&
-                        context.reviews.data.length > 0
-                      "
-                      :reviews="context.reviews.data.slice(0, 3)"
-                      :product="context.product"
-                      :showtitle="false"
-                    />
-                    <div v-else-if="reviewData.isEligible" class="no-reviews">
-                      No reviews found
-                    </div>
-                  </div>
-
-                  <div
-                    class="view-all-ratings"
-                    @click="redirectToReview"
-                    v-if="
-                      context &&
-                      context.reviews &&
-                      context.reviews.data &&
-                      context.reviews.data.length &&
-                      context.reviews.data.length > 3
-                    "
-                  >
-                    <p>View all</p>
-                    <span>&#8594; </span>
-                  </div>
-                </div>
-              </template>
-            </fdk-add-review>
-          </template>
-        </fdk-accounts>
-      </no-ssr>
-    </div>
 
     <!-- Extension Slot (Bottom of Product description) -->
     <fdk-extension
@@ -579,13 +481,6 @@
       "label": "Wishlist",
       "default": true,
       "info": "Show Wishlist for product"
-    },
-    {
-      "type": "checkbox",
-      "id": "reviews",
-      "label": "Review",
-      "default": true,
-      "info": "Show Reviews of product"
     },
     {
       "type": "checkbox",
@@ -670,13 +565,6 @@
     },
     {
       "type": "checkbox",
-      "id": "ratings",
-      "label": "Product Rating",
-      "default": true,
-      "info": "Show Product Ratings"
-    },
-    {
-      "type": "checkbox",
       "id": "similar_products",
       "label": "Similar Products",
       "default": true,
@@ -751,14 +639,12 @@ import productVariants from "../../components/product-description/product-varian
 import imageGallery from "../../components/product-description/image-gallery.vue";
 import sizeSetInfo from "../../components/product-description/size/size-set-info.vue";
 import deliveryInfo from "../../components/product-description/delivery-info.vue";
-import ratingstar from "./../../global/components/reviews/rating-star.vue";
 import compareActionModalVue from "./../../global/components/compare-action-modal.vue";
 import Favourite from "../components/product-description/favourite.vue";
 import share from "./../../global/components/share.vue";
 import productDesc from "../../templates/components/product-description/product-desc.vue";
 import groupList from "./../../global/components/group-list.vue";
 import NoSSR from "vue-no-ssr";
-import reviewList from "./../../global/components/reviews/review-list.vue";
 import compareproducts from "../../components/product-description/compare-products.vue";
 import SvgWrapper from "../../components/common/svg-wrapper.vue";
 import LadderPricing from "../components/product-description/ladder-price.vue";
@@ -772,13 +658,11 @@ export default {
     "image-gallery": imageGallery,
     "size-set-info": sizeSetInfo,
     "delivery-info": deliveryInfo,
-    "rating-star": ratingstar,
     "compare-action-modal": compareActionModalVue,
     "product-desc": productDesc,
     "group-list": groupList,
     favourite: Favourite,
     "no-ssr": NoSSR,
-    "review-list": reviewList,
     toast,
     share,
     "store-modal": storemodal,
@@ -891,20 +775,6 @@ export default {
     },
     checkSelleble() {
       return this.context?.product_meta?.hasOwnProperty("sellable");
-    },
-    checkReview() {
-      if (
-        this.page_config &&
-        this.page_config.props.reviews &&
-        this.context &&
-        this.context.reviews &&
-        this.context.reviews.data &&
-        this.context.reviews.data.length &&
-        this.context.reviews.data.length > 0
-      ) {
-        return true;
-      }
-      return false;
     },
     getMedias() {
       let images = [];
@@ -1142,18 +1012,6 @@ export default {
           this.storeInfoSelected = {};
         });
     },
-    redirectToReview() {
-      this.$router.push({
-        path: `${this.$route.path}/reviews`,
-        query: { type: "product", uid: this.context.product.uid },
-      });
-    },
-    redirectToAddReview() {
-      this.$router.push({
-        path: `${this.$route.path}/add-review`,
-        query: { type: "product", uid: this.context.product.uid },
-      });
-    },
     addToCart(cart, buyNow = false) {
       if (this.product_meta?.sizes?.length == 0) {
         this.message = "No sizes available. Product Out of Stock";
@@ -1336,70 +1194,6 @@ export default {
   }
 }
 
-.review-container {
-  background-color: @White;
-  padding: 20px 20px 20px 0;
-  margin-top: 20px;
-
-  .rate-prod-btn {
-    display: block;
-    text-align: center;
-    margin: 10px 0 0 0;
-  }
-
-  &__title {
-    font-size: 1.5625rem;
-    font-weight: 600;
-    margin: 10px 0 0 0;
-    text-transform: capitalize;
-    display: flex;
-    justify-content: center;
-    color: @color-black;
-
-    @media @mobile {
-      font-size: 1.2rem;
-    }
-
-    a {
-      padding: 0 0 0 20px;
-      text-transform: capitalize;
-    }
-  }
-
-  .add-review {
-    // text-transform: uppercase;
-    font-size: 14px;
-    text-decoration: underline;
-    // color: @Black;
-    cursor: pointer;
-    text-align: center;
-    margin: 10px 0 0 0;
-    display: block;
-  }
-
-  .no-reviews {
-    margin: 20px 0;
-    text-align: center;
-  }
-
-  .view-all-ratings {
-    margin-top: 20px;
-    display: inline-flex;
-    align-items: center;
-    border-bottom: 1px solid;
-    cursor: pointer;
-
-    p {
-      margin-right: 10px;
-    }
-  }
-}
-
-.product-rating-count {
-  // margin-bottom: 20px;
-  margin-bottom: 0.78125rem;
-}
-
 .book-appt-n-compare {
   display: flex;
   align-items: center;
@@ -1508,7 +1302,6 @@ export default {
     box-sizing: border-box;
 
     tr {
-      // border-bottom: 1px solid #e4e4e4;
       text-align: left;
       font-size: 14px;
       -webkit-column-break-inside: avoid;
@@ -1528,7 +1321,6 @@ export default {
 
       .key {
         font-weight: 700;
-        // background-color: #f3f3f3;
         width: 40%;
       }
     }
@@ -1664,7 +1456,6 @@ export default {
           margin-bottom: 0.625rem;
 
           &--text {
-            // color: @color-gray-2;
             font-size: 0.75rem;
             line-height: 1.0625rem;
           }
@@ -1809,10 +1600,6 @@ export default {
           .attr-para {
             margin-bottom: 0.9375rem;
             display: flex;
-
-            @media @mobile {
-              // flex-direction: column;
-            }
           }
         }
       }
@@ -1824,7 +1611,6 @@ export default {
       margin-top: 3.125rem;
       font-size: 1.5625rem;
       text-align: center;
-      //   text-transform: uppercase;
       font-weight: 600;
 
       @media @mobile {

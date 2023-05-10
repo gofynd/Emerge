@@ -113,7 +113,6 @@
                               </div>
                             </div>
                           </div>
-                          <!-- <p class="item__name">{{ brand.name }}</p> -->
                         </fdk-link>
                         <fdk-placeholder v-else type="collection-1" />
                       </div>
@@ -331,7 +330,6 @@
 import placeholderImage from "./../assets/images/placeholder.png";
 import { isBrowser, isNode } from "browser-or-node";
 import groupList from "./../global/components/group-list.vue";
-// import loader from "./../templates/components/loader";
 import { detectMobileWidth, glidePaginate } from "../helper/utils";
 import emergeImage from "./../global/components/common/emerge-image.vue";
 import Glide from "@glidejs/glide";
@@ -663,10 +661,8 @@ export default {
   margin: 0;
   position: relative;
   .top-items {
-    // padding: 14px;
     border-radius: @border-radius;
     background: transparent;
-    // margin: 10px 0 0 0;
   }
 
   .title-block {
@@ -750,16 +746,9 @@ export default {
   }
 }
 .common-card {
-  // height: 420px;
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  // @media @tablet {
-  //   height: 332px;
-  // }
-  // @media @mobile {
-  //   height: 270px;
-  // }
   height: 100%;
   > section {
     min-height: 200px;
@@ -772,8 +761,6 @@ export default {
     flex: 1;
     @media @mobile {
       min-height: 150px;
-      // height: 70%;
-      // align-items: flex-start;
     }
   }
   h3 {
@@ -792,7 +779,6 @@ export default {
     padding: 30px 10px 10px 10px;
     @media @mobile {
       font-size: 13px;
-      // height: 30%;
     }
   }
   .logo-wrapper {

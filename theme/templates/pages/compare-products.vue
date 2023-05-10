@@ -26,7 +26,6 @@ export default {
 .compare-header {
   background: #f8f8f8;
   color: #000000;
-  // text-align: center;
   padding: 20px 15px;
   font-weight: bold;
   font-size: 25px;

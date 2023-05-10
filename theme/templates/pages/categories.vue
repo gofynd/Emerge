@@ -129,10 +129,6 @@ export default {
   margin: 1px 0 15px 0;
 }
 
-// display: flex;
-// justify-content: space-between;
-// color: #41434c;
-// text-transform: uppercase;
 .title {
   font-weight: 700;
   font-size: 18px;

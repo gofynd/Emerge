@@ -118,19 +118,6 @@ export default {
   display: none;
 }
 .collections {
-  // &__template {
-  //   // .section-heading {
-  //   //   font-size: 18px;
-  //   //   text-align: left;
-  //   //   color: #41434c;
-  //   //   margin-bottom: 6px;
-  //   //   @media @mobile {
-  //   //     font-size: 14px;
-  //   //     margin-bottom: 6px;
-  //   //     margin-left: 9px;
-  //   //   }
-  //   // }
-  // }
   &__content {
     top: 92%;
     position: absolute;
@@ -138,10 +125,6 @@ export default {
     width: 100%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* opacity: 0; */
     transition: all 0.5s;
     background: transparent linear-gradient(180deg, transparent, #000) 0 0
       no-repeat padding-box;
@@ -155,10 +138,8 @@ export default {
   position: relative;
 }
 .top-items {
-  // padding: 14px;
   border-radius: @border-radius;
   background: transparent;
-  // margin: 10px 0 0 0;
 }
 
 .title-block {

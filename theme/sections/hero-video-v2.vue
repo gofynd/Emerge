@@ -7,11 +7,11 @@
       {{ getSectionPropValue(settings, "title") }}
     </h2>
     <div class="video-container">
-      <skeleton
+      <!-- <skeleton
         v-show="isLoading"
         :aspectRatio="16 / 9"
         :mobileAspectRatio="16 / 9"
-      />
+      /> -->
       <template v-if="isMounted">
         <video
           ref="mp4video"
@@ -28,13 +28,16 @@
           @play="showOverlay = false"
           @loadeddata="isLoading = false"
           preload="auto"
-          v-if="isMp4(getVideoSource()) || isGdrive()"
-          v-show="!isLoading"
+          :src="src"
+          allowfullscreen
+          v-if="(isMp4(getVideoSource()) || isGdrive()) && loaded"
           @progress="isLoading = false"
+        ></video>
+        <div
+          class="yt-container"
+          v-if="isYoutube() && loaded"
+          v-show="!isLoading"
         >
-          <source :src="getVideoSource()" type="video/mp4" allowfullscreen />
-        </video>
-        <div class="yt-container" v-else-if="isYoutube()" v-show="!isLoading">
           <div
             class="yt-video"
             ref="ytVideo"
@@ -158,10 +161,16 @@ export default {
       }
     },
   },
+  beforeDestroy() {
+    this.observer.disconnect();
+  },
   mounted() {
     this.isMounted = true;
-    if (this.isYoutube()) {
-      this.loadYTScript();
+    if (isBrowser) {
+      this.observer = new IntersectionObserver(this.handleIntersection, {
+        threshold: 0.5,
+      });
+      this.observer.observe(this.$el);
     }
   },
   data: function () {
@@ -170,6 +179,9 @@ export default {
       isMounted: false,
       showOverlay: true,
       isLoading: true,
+      observer: null,
+      src: "",
+      loaded: false,
     };
   },
   methods: {
@@ -200,6 +212,25 @@ export default {
           setTimeout(self.onYouTubeIframeAPIReady.bind(self), 500);
         }
       }
+    },
+    handleIntersection(entries) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (this.isMp4(this.getVideoSource()) || this.isGdrive()) {
+            this.loadVideo();
+            this.observer.unobserve(this.$el);
+            return;
+          }
+          if (this.isYoutube()) {
+            this.loadYTScript();
+            this.observer.unobserve(this.$el);
+          }
+        }
+      });
+    },
+    loadVideo() {
+      this.src = this.getVideoSource();
+      this.loaded = true;
     },
     removeYTScript() {
       var players = window.players;

@@ -1,6 +1,6 @@
 {
     "name": "Emerge",
-    "version": "1.0.149",
+    "version": "1.0.150",
     "description": "theme",
     "main": "index.js",
     "scripts": {
@@ -9,27 +9,24 @@
     "dependencies": {
         "@glidejs/glide": "^3.4.1",
         "@google/model-viewer": "1.5.0",
-        "@vue/cli": "4.2.2",
-        "@vue/cli-service": "4.4.6",
-        "@vue/cli-service-global": "4.2.2",
         "browser-or-node": "^1.2.1",
         "hammerjs": "^2.0.8",
-        "jquery": "^3.5.1",
-        "less": "3.11.1",
-        "less-loader": "5.0.0",
-        "style-resources-loader": "1.3.3",
         "video.js": "7.8.4",
         "vue-ionicons": "^3.0.4",
         "vue-no-ssr": "^1.1.1",
-        "vue-select": "^3.10.8",
         "vue-slider-component": "^2.8.16",
-        "vue-star-rating": "1.6.1",
         "vue-video-player": "^5.0.2"
     },
     "devDependencies": {
         "@babel/plugin-proposal-optional-chaining": "^7.11.0",
         "@vue/cli-plugin-babel": "^4.5.6",
-        "vue-svg-loader": "^0.16.0"
+        "vue-svg-loader": "^0.16.0",
+        "less-loader": "5.0.0",
+        "less": "3.11.1",
+        "style-resources-loader": "1.3.3",
+        "@vue/cli": "4.2.2",
+        "@vue/cli-service": "4.4.6",
+        "@vue/cli-service-global": "4.2.2"
     },
     "author": "",
     "license": "ISC"

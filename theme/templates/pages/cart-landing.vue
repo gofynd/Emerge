@@ -287,10 +287,8 @@
 <script>
 import button from "./../../global/components/common/button";
 import cartitem from "./../../global/components/cart/cart-item.vue";
-import vSelect from "vue-select";
 import toast from "./../../global/components/toast.vue";
 import share from "./../../global/components/share.vue";
-import "vue-select/dist/vue-select.css";
 import coupons from "./../../global/components/cart/coupons.vue";
 import cartComment from "./../../global/components/cart/comment.vue";
 import breakup from "./../../global/components/cart/breakup.vue";
@@ -316,7 +314,6 @@ export default {
     coupons: coupons,
     comment: cartComment,
     breakup,
-    vSelect,
     toast,
     "svg-wrapper": SvgWrapper,
   },
