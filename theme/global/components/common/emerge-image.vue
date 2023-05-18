@@ -4,7 +4,7 @@
       v-for="(source, index) in sources"
       :key="index"
       :media="getMedia(source)"
-      :srcset="getUrl(source.width, '.webp')"
+      :srcset="getUrl(source.width)"
       type="image/webp"
     />
     <img
@@ -133,7 +133,7 @@ export default {
       let str = "\/" + key + "\/"
       return url.replace(new RegExp(str), "/resize-w:" + width + "/");
     },
-    getUrl(width, extension) {
+    getUrl(width) {
       let url = this.src;
       if( this.getImageType.toLowerCase() === 'gif'){
         return '';
@@ -142,8 +142,6 @@ export default {
       if (this.isError) {
         url = this.placeholder;
       }
-      const pos = url.lastIndexOf(".");
-      url = url.substr(0, pos < 0 ? url.length : pos) + extension;
       const key = searchStringInArray(url, IMAGE_SIZES);
       if (key) {
         return this.resizeW(url, key, width);

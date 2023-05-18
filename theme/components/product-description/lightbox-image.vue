@@ -14,7 +14,7 @@
           <button type="button" :title="closeText" class="vue-lb-button-close">
             <slot name="close">
               <span>
-                <svg-wrapper :svg_src="'cross-white'"></svg-wrapper>
+                <svg-wrapper class="cross-icon" :svg_src="'cross-white'"></svg-wrapper>
               </span>
             </slot>
           </button>
@@ -482,6 +482,10 @@ video.vue-lb-modal-image {
 
 .no-scroll {
   overflow-y: hidden;
+}
+.cross-icon{
+  height: 20px;
+  width: 20px;
 }
 </style>
 

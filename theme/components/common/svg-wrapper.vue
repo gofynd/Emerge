@@ -16,5 +16,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    ::v-deep svg {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

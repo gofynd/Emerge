@@ -31,7 +31,12 @@
                         :src="
                           product.medias.length > 0 ? product.medias[0].url : ''
                         "
-                        :sources="[{ width: 492 }]"
+                        :sources="[
+            { breakpoint: { min: 1024 }, width: 492 },
+            { breakpoint: { min: 768 }, width: 492 },
+            { breakpoint: { min: 481 }, width: 492 },
+            { breakpoint: { max: 390 }, width: 492 },
+          ]"
                         :title="product.name"
                         :alt="product.name"
                       />

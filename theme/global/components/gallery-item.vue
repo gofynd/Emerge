@@ -8,7 +8,12 @@
           <emerge-image
             v-if="block.props.image.value"
             :src="block.props.image.value"
-            :sources="[{width: 540}]"
+            :sources="[
+                { breakpoint: { min: 1024 }, width: 540 },
+                { breakpoint: { min: 768 }, width: 540 },
+                { breakpoint: { min: 481 }, width: 540 },
+                { breakpoint: { max: 390 }, width: 540 },
+              ]"
           />
           <fdk-placeholder v-else :type="'image'" />
         </section>

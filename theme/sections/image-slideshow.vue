@@ -39,7 +39,30 @@
                       <emerge-image
                         v-if="block.props.image.value"
                         :src="block.props.image.value"
-                        :sources="[]"
+                        :sources="[
+              {
+                breakpoint: { min: 1400 },
+                width: 1500,
+              },
+              {
+                breakpoint: { min: 1023 },
+                width: 1200,
+              },
+              {
+                breakpoint: { min: 800 },
+                width: 850,
+              },
+              {
+                breakpoint: { max: 768 },
+                width: 780,
+                url: getMobileImage(block),
+              },
+              {
+                breakpoint: { max: 480 },
+                width: 480,
+                url: getMobileImage(block),
+              },
+            ]"
                         :placeholder="''"
                       />
                       <fdk-placeholder v-else type="banner-1" />
@@ -418,6 +441,12 @@ export default {
     },
   },
   methods: {
+    getMobileImage(block) {
+      return (
+        getSectionPropValue(block, "mobile_image") ||
+        require("../assets/images/placeholder3x4.png")
+      );
+    },
     checkisBrowser() {
       return isBrowser;
     },

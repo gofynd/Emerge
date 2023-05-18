@@ -115,6 +115,7 @@
               </template>
             </fdk-accounts>
             <comment
+              v-if="page_config && page_config.props.comment"
               :value="comment.value"
               :placeholder="comment.label"
               :cart="cart"
@@ -224,6 +225,13 @@
       "label": "GST",
       "default": true,
       "info": "Show GST on cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "comment",
+      "label": "Comment",
+      "default": true,
+      "info": "Show comment on cart"
     },
     {
       "type": "checkbox",
@@ -544,7 +552,11 @@ export default {
         return;
       }
     },
-    routeToCheckout() {
+    routeToCheckout() {     
+      if(!this.page_config.props.comment){
+        this.$router.push(`/cart/delivery?id=${this.context.bag_data.id}`);
+        return
+      }
       if (
         this.page_config.props.is_commentmandatory &&
         this.comment.value.trim().length == 0
