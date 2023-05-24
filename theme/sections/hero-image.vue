@@ -13,10 +13,26 @@
         v-if="settings.props.image.value"
         :src="settings.props.image.value"
         :sources="[
-          { breakpoint: { min: 1281, max: 1920 }, width: 1920 },
-          { breakpoint: { min: 769, max: 1280 }, width: 1280 },
-          { breakpoint: { min: 361, max: 768 }, width: 768 },
-          { breakpoint: { max: 360 }, width: 360 },
+          {
+            breakpoint: { min: 1400 },
+            width: 1500,
+          },
+          {
+            breakpoint: { min: 1023 },
+            width: 1200,
+          },
+          {
+            breakpoint: { min: 800 },
+            width: 850,
+          },
+          {
+            breakpoint: { max: 768 },
+            width: 780,
+          },
+          {
+            breakpoint: { max: 480 },
+            width: 480,
+          },
         ]"
         class="hero__image"
       />

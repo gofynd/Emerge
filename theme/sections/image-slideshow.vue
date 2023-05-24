@@ -397,7 +397,7 @@
 </style>
 <script>
 import { isBrowser, isNode } from "browser-or-node";
-import { detectMobileWidth, glidePaginate } from "../helper/utils";
+import { detectMobileWidth, glidePaginate,getSectionPropValue } from "../helper/utils";
 import Glide from "@glidejs/glide";
 import "../../node_modules/@glidejs/glide/dist/css/glide.core.min.css";
 import "../../node_modules/@glidejs/glide/dist/css/glide.theme.min.css";
@@ -441,7 +441,8 @@ export default {
     },
   },
   methods: {
-    getMobileImage(block) {
+    getSectionPropValue,
+     getMobileImage(block) {
       return (
         getSectionPropValue(block, "mobile_image") ||
         require("../assets/images/placeholder3x4.png")
