@@ -72,6 +72,7 @@
   .modal {
     .modal-container {
       height: 98vh;
+      height: 100vh;
       width: 100%;
     }
   }
@@ -86,7 +87,7 @@
 </style>
 
 <script>
-import SvgWrapper from './../../components/common/svg-wrapper.vue';
+import SvgWrapper from "./../../components/common/svg-wrapper.vue";
 export default {
   name: "modal",
   props: {
@@ -126,7 +127,7 @@ export default {
     },
   },
   components: {
-    "svg-wrapper": SvgWrapper
+    "svg-wrapper": SvgWrapper,
   },
   mounted() {
     this.$root.$el.append(this.$el);

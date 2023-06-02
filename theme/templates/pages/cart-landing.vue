@@ -31,6 +31,8 @@
                 <template slot-scope="share">
                   <div class="cart-share" @click="getCartShareLink(share)">
                     <svg-wrapper :svg_src="'share'"></svg-wrapper>
+                  </div>
+                  <div>
                     <transition name="fade">
                       <rd-share
                         :title="`Spread the shopping delight! Scan QR & share these products with
