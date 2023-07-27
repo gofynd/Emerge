@@ -22,9 +22,6 @@ export default {
   getFaq: () =>
     import(/*webpackChunkName:"extras" */ "./templates/pages/faq.vue"),
 
-  getCartLanding: () =>
-    import(/* webpackChunkName:"cart" */ "./templates/pages/cart-landing.vue"),
-
   getBrands: () =>
     import(/* webpackChunkName:"products" */ "./templates/pages/brands.vue"),
   getCategories: () =>
@@ -61,9 +58,8 @@ export default {
       /* webpackChunkName:"products-listing" */ "./templates/pages/category-listing.vue"
     ),
   getWishList: () =>
-    import(
-      /* webpackChunkName:"profile" */ "./templates/pages/wishlist.vue"
-    ),
+    import(/* webpackChunkName:"profile" */ "./templates/pages/wishlist.vue"),
+  
   getCustomTemplates: () => {
     return CustomTemplates;
   },

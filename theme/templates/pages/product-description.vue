@@ -276,7 +276,7 @@
             <template slot-scope="cart">
               <button
                 class="button"
-                @click="addToCart(cart)"
+                @click="addProductForCheckout(cart, false)"
                 v-if="
                   context.product_meta &&
                   context.product_meta.sellable &&
@@ -288,7 +288,7 @@
               </button>
               <button
                 class="button"
-                @click="addToCart(cart, true)"
+                @click="addProductForCheckout(cart, true)"
                 v-if="
                   context.product_meta &&
                   context.product_meta.sellable &&
@@ -326,6 +326,7 @@
 
           <!--Delivery Info-->
           <delivery-info
+            ref="deliveryInfo"
             :showUserPincodeModal="showUserPincodeModal"
             :isExplicitelySelectedStore="isExplicitelySelectedStore"
             :storeInfo="storeInfo"
@@ -338,7 +339,14 @@
             @hideTatError="onHideTatError"
             :pincode="pincode"
             :pincodeError="pincodeError"
+            :pincodeErrorMessage="pincodeErrorMsg"
             @togglePincodeError="togglePincodeError"
+            @changeCurrentPincodeValue="changeCurrentPincodeValue"
+            :selectPincodeError="selectPincodeError"
+            @disableSelectPincodeError="disableSelectPincodeError"
+            @onPincodeError="onPincodeError"
+            @hidePincodeError="hidePincodeError"
+            :showError="showPincodeError"
           ></delivery-info>
 
           <compare-action-modal
@@ -372,7 +380,7 @@
               </template>
             </fdk-compare-action>
           </div>
-          <div class="mt-5" v-if="context.product.grouped_attributes">
+          <div v-if="context.product.grouped_attributes">
             <product-desc
               :product="context.product"
               :storeInfo="storeInfo"
@@ -522,11 +530,11 @@
       "default": "Price inclusive of all taxes",
       "label": "Price tax label text"
     },
-    {
-      "type": "text",
-      "id": "default_pincode",
-      "label": "Default Pincode",
-      "default": ""
+     {
+      "type": "checkbox",
+      "id": "mandatory_pincode",
+      "label": "Mandatory Pincode",
+      "default": true
     },
     {
       "type": "checkbox",
@@ -648,6 +656,8 @@ import NoSSR from "vue-no-ssr";
 import compareproducts from "../../components/product-description/compare-products.vue";
 import SvgWrapper from "../../components/common/svg-wrapper.vue";
 import LadderPricing from "../components/product-description/ladder-price.vue";
+import { getPageConfigValue, detectMobileWidth } from "../../helper/utils";
+import { isBrowser } from "browser-or-node";
 
 export default {
   components: {
@@ -716,10 +726,7 @@ export default {
       pincodeErrorMsg: "",
       sizeError: false,
       pincodeSuccess: false,
-      pincode:
-        this.context.user_pincode ||
-        this.page_config?.props?.default_pincode ||
-        "",
+      pincode: this.context.user_pincode || "",
       isMounted: false,
       fromPincode: null,
       toast_message: "",
@@ -749,6 +756,9 @@ export default {
       ladderPrices: null,
       activeLadderIndex: null,
       activeLadder: null,
+      currentPincodeValue: this.context?.user_pincode || "",
+      selectPincodeError: false,
+      showPincodeError: false,
     };
   },
   computed: {
@@ -814,6 +824,7 @@ export default {
     },
   },
   methods: {
+    getPageConfigValue,
     togglePincodeError(value) {
       this.pincodeError = value;
     },
@@ -876,10 +887,7 @@ export default {
             self.onSizeClicked(firstAvailableSize, self.$refs?.sizeContainer);
           });
         }
-        if (
-          !this.page_config?.props?.default_pincode &&
-          !this.context?.user_pincode
-        ) {
+        if (!this.context?.user_pincode) {
           this.showUserPincodeModal = true;
         }
       }
@@ -981,19 +989,21 @@ export default {
         this.sizeClicked(sellerData.loadSellers);
       }
     },
-    sizeClicked(loadSellers) {
+    sizeClicked(loadSellers, currentPincode = null) {
+      let updatedPincode =
+        currentPincode === null ? this.pincode : currentPincode;
       let options = {
         size: this.selectedSize,
         slug: this.context.product.slug,
-        pincode: this.pincode,
+        pincode: updatedPincode,
       };
       this.loadSpinner = true;
 
-      loadSellers(options)
+      return loadSellers(options)
         .then((res) => {
           if (res && Object.keys(res).length) {
             this.storeInfo = res;
-            this.store_count = res.store.count;
+            this.store_count = res.store?.count;
             this.showSoldByModal = true;
             this.loadSpinner = false;
             this.getLadderOffers();
@@ -1001,32 +1011,99 @@ export default {
           } else {
             return Promise.reject();
           }
+          return true;
         })
         .catch((err) => {
+          const errMessage = err?.message || "Something went wrong";
           this.loadSpinner = false;
           this.pincodeErrorMsg = err?.message || "Something went wrong";
           this.toast_message = err?.message || "Something went wrong";
-          this.$refs.pdpToast.showToast();
           this.pincodeError = true;
           this.storeInfo = null;
           this.storeInfoSelected = {};
+          if (
+            errMessage.includes("serviceable") ||
+            errMessage.includes("pincode")
+          ) {
+            this.onPincodeError(err?.message || defaultErrMessage);
+            this.toast_message = "Please enter a valid PIN code";
+            this.$refs.pdpToast.showToast(err?.message);
+            this.onTatError(err?.message);
+          } else {
+            this.toast_message = "Something went wrong";
+            this.$refs.pdpToast.showToast("error");
+          }
+
+          return false;
         });
     },
-    addToCart(cart, buyNow = false) {
+    addProductForCheckout(cart, isBuyNow) {
+      if (this.currentPincodeValue) {
+        if (this.showPincodeError) {
+          this.toast_message = this.pincodeErrorMsg || "Something went wrong";
+          this.$refs.pdpToast.showToast();
+          return;
+        } else {
+          const deliveryInfoRef = this.$refs?.deliveryInfo;
+          const pdpPincodeRef = deliveryInfoRef.$refs?.pdpPincode;
+          deliveryInfoRef?.checkPincode(pdpPincodeRef)?.then((isValid) => {
+            if (isValid) {
+              this.addToCart(cart, isBuyNow);
+            } else {
+              //Can show toast error message here
+            }
+          });
+        }
+      } else {
+        if (this.page_config?.props?.mandatory_pincode) {
+          this.showPincodeError = false;
+          this.selectPincodeError = true;
+          this.focusPincodeInput();
+          return;
+        }
+        const isEmptyStoreInfo = !Object.keys(this.storeInfo || {}).length;
+        if (isEmptyStoreInfo) {
+          isBrowser && localStorage.removeItem("m_userPincode");
+          this.sizeClicked(
+            this.$refs?.sizeContainer?.loadSellers,
+            this.currentPincodeValue
+          ).then((isValid) => {
+            if (isValid) {
+              this.addToCart(cart, isBuyNow);
+            }
+          });
+        } else {
+          this.addToCart(cart, isBuyNow);
+        }
+      }
+    },
+    focusPincodeInput() {
+      const deliveryPincodeRef =
+        this.$refs?.deliveryInfo?.$refs?.deliveryPincode;
+
+      if (deliveryPincodeRef) {
+        deliveryPincodeRef?.focus();
+
+        if (isBrowser && !detectMobileWidth()) {
+          const offsetY =
+            deliveryPincodeRef.getBoundingClientRect()?.top +
+            window?.scrollY -
+            window?.innerHeight / 4;
+
+          window?.scrollTo({
+            top: offsetY,
+            behavior: "smooth",
+          });
+        }
+      }
+    },
+    addToCart(cart, isBuyNow) {
       if (this.product_meta?.sizes?.length == 0) {
         this.message = "No sizes available. Product Out of Stock";
         this.showMessage = true;
         return;
       } else if (!this.selectedSize) {
         this.sizeError = true;
-        if (window.innerWidth < 780) {
-          var top = this.$refs.sizeContainer.offsetTop;
-          window.scrollTo(0, 0);
-        }
-        return;
-      } else if (this.pincodeError) {
-        this.toast_message = this.pincodeErrorMsg || "Something went wrong";
-        this.$refs.pdpToast.showToast();
         if (window.innerWidth < 780) {
           var top = this.$refs.sizeContainer.offsetTop;
           window.scrollTo(0, 0);
@@ -1045,19 +1122,27 @@ export default {
             store_id: this.storeInfo?.store.uid,
           },
         ],
-        buy_now: buyNow,
+        buy_now: isBuyNow,
       };
       cart
         .addToCart(addItemData)
         .then((data) => {
           if (data.success) {
-            if (this.$refs.carousel) {
-              this.$refs.carousel.$el.style.visibility = "hidden";
+            this.hidePincodeError();
+            if (!isBuyNow) {
+              if (this.$refs.carousel) {
+                this.$refs.carousel.$el.style.visibility = "hidden";
+              }
+              this.toast_message = "Item(s) added to your Cart";
+              this.$refs.pdpToast.showToast();
+              // this.$router.push("/cart/bag");
+            } else {
+              this.$router.push("/cart/bag");
             }
-            this.$router.push("/cart/bag");
           } else {
-            this.toast_message = data?.message;
-            this.$refs.pdpToast.showToast();
+            // this.toast_message = data?.message;
+            // this.$refs.pdpToast.showToast();
+            throw data;
           }
         })
         .catch((err) => {
@@ -1075,6 +1160,7 @@ export default {
     },
     onPincodeChanged(event) {
       this.pincode = event;
+      this.sizeClicked(this.$refs?.sizeContainer?.loadSellers);
     },
     hideShare() {
       this.showShare = false;
@@ -1082,6 +1168,15 @@ export default {
     onTatError(err) {
       this.message = err;
       this.showMessage = true;
+    },
+    onPincodeError(err) {
+      this.pincodeError = true;
+      this.showPincodeError = true;
+      this.pincodeErrorMsg = "Please enter a valid PIN code";
+    },
+    hidePincodeError() {
+      this.showPincodeError = false;
+      this.pincodeErrorMsg = "";
     },
     onHideTatError() {
       this.message = "";
@@ -1145,6 +1240,12 @@ export default {
           canvas.height
         );
       }
+    },
+    changeCurrentPincodeValue(value) {
+      this.currentPincodeValue = value;
+    },
+    disableSelectPincodeError(isDisable) {
+      this.selectPincodeError = isDisable;
     },
   },
 };
