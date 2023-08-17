@@ -57,7 +57,10 @@
                     <span class="u-df-align-center flex-justify-between">
                       <p class="mr-2">{{ subnav.display }}</p>
                       <svg-wrapper
-                        v-if="subnav.sub_navigation && subnav.sub_navigation.length > 0"
+                        v-if="
+                          subnav.sub_navigation &&
+                          subnav.sub_navigation.length > 0
+                        "
                         class="dropdown-icon header-icon"
                         :svg_src="'arrow-down'"
                       ></svg-wrapper>
@@ -66,7 +69,9 @@
 
                   <ul
                     class="l3-navigation-list"
-                    v-if="subnav.sub_navigation && subnav.sub_navigation.length > 0"
+                    v-if="
+                      subnav.sub_navigation && subnav.sub_navigation.length > 0
+                    "
                     :style="`background-color: ${global_config.props.header_bg_color};color: ${global_config.props.header_text_color}`"
                   >
                     <li
@@ -135,6 +140,16 @@
                     class="wishlist header-icon"
                     :svg_src="'wishlist-active'"
                   ></svg-wrapper>
+                  <p
+                    class="wishlist-count"
+                    v-if="
+                      isMounted &&
+                      accountsData.is_logged_in &&
+                      getWishlistCount !== 0
+                    "
+                  >
+                    {{ context.favourite_ids.length }}
+                  </p>
                 </div>
                 <div
                   class="icon right__icons--bag mr-5 py-5"
@@ -311,11 +326,21 @@
             <div
               class="icon right__icons--wishlist"
               @click.stop="checkLogin(accountsData, 'wishlist')"
-            > 
+            >
               <svg-wrapper
                 class="wishlist mobile-icon header-icon"
                 :svg_src="'wishlist-active'"
               ></svg-wrapper>
+              <p
+                class="wishlist-count"
+                v-if="
+                  isMounted &&
+                  accountsData.is_logged_in &&
+                  getWishlistCount !== 0
+                "
+              >
+                {{ context.favourite_ids.length }}
+              </p>
             </div>
             <div
               v-if="isMounted && !global_config.props.disable_cart"
@@ -395,7 +420,10 @@
                       :key="idx"
                       @click.stop="redirectToMenu(subnav)"
                     >
-                      <fdk-link v-if="!hasSubNavigation(subnav)" :link="subnav.link">
+                      <fdk-link
+                        v-if="!hasSubNavigation(subnav)"
+                        :link="subnav.link"
+                      >
                         <p>{{ subnav.display }}</p>
                       </fdk-link>
                       <p v-else @click.stop="redirectToMenu(subnav)">
@@ -413,7 +441,10 @@
                       <transition name="slide">
                         <div
                           class="hamburger mobile__subnav"
-                          v-if="subnav.sub_navigation && subnav.sub_navigation.showSubMenu"
+                          v-if="
+                            subnav.sub_navigation &&
+                            subnav.sub_navigation.showSubMenu
+                          "
                           :style="`background-color: ${global_config.props.header_bg_color};color: ${global_config.props.header_text_color}`"
                         >
                           <ul class="hamburger__navigation">
@@ -700,7 +731,7 @@ export default {
   }
   .header-icon {
     fill: var(--header_icon_color);
-    width:  30px;
+    width: 30px;
     height: 30px;
     ::v-deep svg {
       width: 100%;
@@ -773,7 +804,8 @@ export default {
   }
 
   //navigation
-  .l2-navigation-list, .l3-navigation-list {
+  .l2-navigation-list,
+  .l3-navigation-list {
     position: absolute;
     width: 250px;
     box-sizing: border-box;
@@ -794,7 +826,7 @@ export default {
         padding: 0.5rem 1rem;
         display: block;
       }
-      .dropdown-icon{
+      .dropdown-icon {
         transform: rotate(-90deg);
       }
       &:hover {
@@ -838,6 +870,24 @@ export default {
           font-size: 10px;
         }
       }
+    }
+
+    .wishlist-count {
+      color: white;
+      background-color: @primary-color;
+      position: absolute;
+      right: 0;
+      top: 32px;
+      transform: translate(50%, -50%);
+      border-radius: 50%;
+      height: 1.25rem;
+      width: 1.25rem;
+      overflow: hidden;
+      line-height: 18px;
+      text-align: center;
+      font-size: 10px;
+      justify-content: center;
+      font-weight: bold;
     }
     .setting {
       text-align: center;
@@ -955,7 +1005,7 @@ export default {
       height: 24px;
       &.setting {
         width: 20px;
-        height: 20px; 
+        height: 20px;
       }
     }
     .center-mobile {
@@ -998,10 +1048,16 @@ export default {
         width: 16px;
         height: 16px;
       }
+      .wishlist-count {
+        top: 2px;
+        width: 16px;
+        height: 16px;
+      }
     }
   }
   .icon {
     cursor: pointer;
+    position: relative;
   }
   .hamburger {
     position: fixed;
@@ -1055,7 +1111,8 @@ export default {
             fill: var(--header_nav_hover_color) !important;
           }
         }
-        & > a, & > p {
+        & > a,
+        & > p {
           padding: 0.625rem 0;
           flex-grow: 1;
         }

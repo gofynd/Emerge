@@ -1,33 +1,24 @@
 <template>
-  <div class="wl-cont" :style="global_config ? 'color:' + global_config.props.text_body_color : ''">
+  <div
+    class="wl-cont"
+    :style="global_config ? 'color:' + global_config.props.text_body_color : ''"
+  >
     <div v-if="context.favourites && context.favourites.loading">
       <fdk-loader></fdk-loader>
     </div>
-    <template
-      v-if="
-        context &&
-          context.favourites &&
-          context.favourites.items &&
-          context.favourites.items.length
-      "
-    >
+    <template v-if="getFollowProducts?.length > 0">
       <div class="">
-        <h2 class="heading">
-          Wishlist
-        </h2>
+        <h2 class="heading">Wishlist</h2>
         <div>
           <fdk-infinite-favourites>
             <template slot-scope="infiniteLoaderData">
               <div class="grid-wrapper">
                 <div class="group-cards">
                   <div
-                    v-for="(product, index) in context.favourites.items"
-                    :key="`p-wl-${index}`"
+                    v-for="product in getFollowProducts"
+                    :key="`p-wl-${product.uid}`"
                   >
-                    <fdk-link
-                      :link="redirectPdp(product)"
-                      class="wl-link"
-                    >
+                    <fdk-link :link="redirectPdp(product)" class="wl-link">
                       <fy-product-card
                         :showWishlist="true"
                         :isWishListPage="true"
@@ -36,20 +27,18 @@
                       />
                     </fdk-link>
                   </div>
-                   <fdk-loader
-              id="loader"
-              v-if="infiniteLoaderData.hasNext"
-            ></fdk-loader>
+                  <fdk-loader
+                    id="loader"
+                    v-if="infiniteLoaderData.hasNext"
+                  ></fdk-loader>
                 </div>
-
               </div>
-
             </template>
           </fdk-infinite-favourites>
         </div>
       </div>
     </template>
-    <div v-else-if="context.favourites && !context.favourites.loading && !context.favourites.items.length">
+    <div v-else>
       <fdk-empty-state title="Your Wishlist is empty." />
     </div>
   </div>
@@ -102,7 +91,15 @@ export default {
         return `/product/${product.slug}`;
       }
       return;
-    }
+    },
+  },
+  computed: {
+    getFollowProducts() {
+      return (
+        this.context?.favourites?.items?.filter((product) => product.follow) ||
+        []
+      );
+    },
   },
 };
 </script>
