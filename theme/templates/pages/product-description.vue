@@ -990,6 +990,10 @@ export default {
       }
     },
     sizeClicked(loadSellers, currentPincode = null) {
+      if (!this.selectedSize) {
+        this.sizeError = true;
+        return;
+      }
       let updatedPincode =
         currentPincode === null ? this.pincode : currentPincode;
       let options = {
